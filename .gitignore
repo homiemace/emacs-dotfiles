@@ -1,0 +1,58 @@
+# Emacs generated files
+*~
+\#*\#
+.\#*
+*.elc
+auto-save-list
+tramp
+network-security.data
+.org-id-locations
+.last-package-update-day
+session.*
+.session
+.emacs.desktop
+.emacs.desktop.lock
+elpa/gnupg/
+url/cache/
+url/cookies
+eshell/history
+eshell/lastdir
+recentf
+places
+bookmarks
+projectile-bookmarks.eld
+projectile.cache
+smex-items
+ido.last
+org-clock-save.el
+elpa/archives/
+quelpa/
+straight/
+auth-source*
+.authinfo
+.authinfo.gpg
+secrets.el
+eln-cache/
+elpa/
+var/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# Logs & temp
+*.log
+*.tmp
+*.bak
+EOF
