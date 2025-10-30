@@ -120,6 +120,10 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package page-break-lines
+  :ensure t
+  :hook (emacs-lisp-mode . page-break-lines-mode))
+
 ;; ============================================================================
 ;; DASHBOARD
 ;; ============================================================================
