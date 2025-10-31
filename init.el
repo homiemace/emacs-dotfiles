@@ -273,11 +273,18 @@
 ;; ORG MODE SETUP
 ;; ============================================================================
 
+(defun efs/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (visual-line-mode 1))
+
+
 (defun efs/org-font-setup ()
   ;; Replace list hyphen with dot
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
 
   ;; Set faces for heading levels
   (dolist (face '((org-level-1 . 1.2)
@@ -304,6 +311,14 @@
   :config
   (setq org-ellipsis " ▾")
   (efs/org-font-setup))
+
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+
+(setq org-agenda-files
+      '("~/emacs-dotfiles/org/Tasks.org"
+       "~/emacs-dotfiles/org/Birthdays.org"))
 
 (use-package org-bullets
   :after org
