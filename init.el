@@ -280,6 +280,11 @@
 
 
 (defun efs/org-font-setup ()
+  ;; Check for DM Sans cross-platform
+  (let ((dm-font (car (seq-filter
+                       (lambda (f)
+                         (string-match "DM Sans" f))
+                       (font-family-list)))))
   ;; Replace list hyphen with dot
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
@@ -295,16 +300,19 @@
                   (org-level-6 . 1.1)
                   (org-level-7 . 1.1)
                   (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "DM Sans" :weight 'regular :height (cdr face)))
+    (set-face-attribute (car face) nil
+                            :font dm-font
+                            :weight 'regular
+                            :height (cdr face)))))
 
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
   (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
   (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
   (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
 (use-package org
   :hook (org-mode . efs/org-mode-setup)
