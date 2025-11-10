@@ -1,6 +1,4 @@
 * Active
-** DONE Finish documentation
-CLOSED: [2025-10-31 Fri 12:41] SCHEDULED: <2025-10-31 Fri>
 ** NEXT Merge PR                                                      :work:
 DEADLINE: <2025-11-01 Sat>
 ** NEXT Reply to John's Email                              :note:work:email:

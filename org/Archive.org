@@ -1,0 +1,5 @@
+* October
+** DONE Finish documentation
+CLOSED: [2025-10-31 Fri 12:41] SCHEDULED: <2025-10-31 Fri>
+* November
+* December
