@@ -4,9 +4,6 @@
 ;; PERFORMANCE & STARTUP
 ;; ============================================================================
 
-(setq native-comp-deferred-compilation nil)
-(setq native-comp-jit-compilation nil)
-
 ;; (setq debug-on-error t)
 
 (defvar efs/default-font-size 170)
