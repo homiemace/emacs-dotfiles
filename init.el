@@ -309,8 +309,55 @@
                           :weight 'regular
                           :height (cdr face)))))
 
+(defun my/quick-journal-capture ()
+  "Quick capture to journal."
+  (interactive)
+  (org-capture nil "jj"))
+
+;; ============================================================================
+;; ORG MODE SETUP
+;; ============================================================================
+
+(defun efs/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (visual-line-mode 1))
+
+(defun efs/org-font-setup ()
+  ;; Check for DM Sans cross-platform
+  (let ((dm-font (car (seq-filter
+                       (lambda (f)
+                         (string-match "DM Sans" f))
+                       (font-family-list)))))
+    
+    ;; Replace list hyphen with dot
+    (font-lock-add-keywords 'org-mode
+                            '(("^ *\\([-]\\) "
+                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+    ;; Set faces for heading levels
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil
+                          :font dm-font
+                          :weight 'regular
+                          :height (cdr face)))))
+
+(defun my/quick-journal-capture ()
+  "Quick capture to journal."
+  (interactive)
+  (org-capture nil "jj"))
+
 (use-package org
+  :demand t
   :hook (org-mode . efs/org-mode-setup)
+  :bind (("C-c j" . my/quick-journal-capture))
   :config
   (setq org-ellipsis " ▾")
   (setq org-agenda-start-with-log-mode t)
@@ -319,20 +366,25 @@
   
   (setq org-agenda-files
         '("~/emacs-dotfiles/org/Tasks.org"
-          "~/emacs-dotfiles/org/Birthdays.org"))
+          "~/emacs-dotfiles/org/Birthdays.org"
+          "~/emacs-dotfiles/org/Habits.org"))
 
-   (setq org-todo-keywords
+  (require 'org-habit)
+  (add-to-list 'org-modules 'org-habit)
+  (setq org-habit-graph-column 60)
+
+  (setq org-todo-keywords
     '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
       (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-    (setq org-refile-targets
+  (setq org-refile-targets
     '(("Archive.org" :maxlevel . 1)
       ("Tasks.org" :maxlevel . 1)))
 
   ;; Save Org buffers after refiling!
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-   (setq org-tag-alist
+  (setq org-tag-alist
     '((:startgroup)
        ; Put mutually exclusive tags here
        (:endgroup)
@@ -346,7 +398,7 @@
        ("note" . ?n)
        ("idea" . ?i)))
 
-     (setq org-agenda-custom-commands
+  (setq org-agenda-custom-commands
    '(("d" "Dashboard"
      ((agenda "" ((org-deadline-warning-days 7)))
       (todo "NEXT"
@@ -392,7 +444,32 @@
       (todo "CANC"
             ((org-agenda-overriding-header "Cancelled Projects")
              (org-agenda-files org-agenda-files)))))))
-  
+
+  (setq org-capture-templates
+    `(("t" "Tasks / Projects")
+      ("tt" "Task" entry (file+olp "~/emacs-dotfiles/org/Tasks.org" "Inbox")
+           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+
+      ("j" "Journal Entries")
+      ("jj" "Journal" entry
+           (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+           "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+           :clock-in :clock-resume
+           :empty-lines 1)
+      ("jm" "Meeting" entry
+           (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+           "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+           :clock-in :clock-resume
+           :empty-lines 1)
+
+      ("w" "Workflows")
+      ("we" "Checking Email" entry (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+           "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+
+      ("m" "Metrics Capture")
+      ("mw" "Weight" table-line (file+headline "~/emacs-dotfiles/org/Metrics.org" "Weight")
+       "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+
   ;; Call font setup
   (efs/org-font-setup)
   

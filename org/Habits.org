@@ -1,0 +1,5 @@
+* TODO Brush my teeth
+SCHEDULED: <2025-11-12 Wed +1d>
+:PROPERTIES:
+:STYLE:    habit
+:END:

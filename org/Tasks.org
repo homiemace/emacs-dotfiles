@@ -1,4 +1,11 @@
+* Inbox
+
+** TODO Commit config updates
+  [2025-11-12 Wed 12:27]
+  [[file:~/emacs-dotfiles/org/Tasks.org::*Inbox][Inbox]]
+
 * Active
+
 ** NEXT Merge PR                                                      :work:
 DEADLINE: <2025-11-01 Sat>
 ** NEXT Reply to John's Email                              :note:work:email:
