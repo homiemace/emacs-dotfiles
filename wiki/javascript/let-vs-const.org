@@ -1,0 +1,115 @@
+#+TITLE: let vs const
+#+FILETAGS: :javascript:fundamentals:variables:
+
+* Big Questions
+
+** What is this?
+Two ways to declare variables with different reassignment rules.
+
+** Why is this important?
+Prevents bugs by making it clear which variables should change vs stay the same.
+
+** When will I need this?
+Every time you create a variable—you must choose ~let~ or ~const~.
+
+** How does it work?
+- ~const~ = can't reassign (but can mutate if it's an array/object)
+- ~let~ = can reassign freely
+
+* ELI5 Definition
+
+*const:* Like writing in pen—once you write it, you can't erase and write something else.
+
+*let:* Like writing in pencil—you can erase and change it anytime.
+
+BUT: If you write a list in pen (const array), you CAN add more items to the list, you just can't throw away the whole paper and start over.
+
+* Code Examples
+
+** const (can't reassign)
+#+begin_src javascript
+const age = 25;
+age = 26;  // ERROR! Can't reassign const
+#+end_src
+
+** let (can reassign)
+#+begin_src javascript
+let age = 25;
+age = 26;  // Works fine
+#+end_src
+
+** TRICKY: const with arrays (can mutate!)
+#+begin_src javascript
+const nums = [1, 2, 3];
+nums.push(4);  // Works! Mutating is OK
+// nums = [1, 2, 3, 4]
+
+nums = [5, 6, 7];  // ERROR! Can't reassign
+#+end_src
+
+* When to Use Each
+
+** Use ~const~ (default choice)
+#+begin_src javascript
+const projects = [...];     // Array you'll mutate but not reassign
+const API_KEY = '123abc';   // Never changes
+const user = { name: 'Bob' }; // Object you'll mutate but not reassign
+#+end_src
+
+** Use ~let~ (when you need to reassign)
+#+begin_src javascript
+let count = 0;
+for (let i = 0; i < 5; i++) {  // Loop counter
+    count = count + 1;  // Reassigning
+}
+
+let result = data.projects;
+if (filtered) {
+    result = data.projects.filter(...);  // Reassigning
+}
+#+end_src
+
+** From my code
+#+begin_src javascript
+let sortBy = $state<'date' | 'name'>('date');  // Changes
+let selectedTags = $state<string[]>([]);       // Changes
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_example
+const = default choice (prevents accidental reassignment)
+let = only when you KNOW you need to reassign
+#+end_example
+
+*Rule of thumb:* Start with ~const~, change to ~let~ if you get an error.
+
+* Common Misconception I Had
+
+I thought ~const~ meant "can't change AT ALL."
+Actually: Can't REASSIGN, but CAN mutate.
+
+#+begin_src javascript
+const arr = [1, 2];
+arr.push(3);  // Mutation OK
+arr = [];     // Reassignment NOT OK
+#+end_src
+
+* Quick Reference
+
+| Action               | const | let |
+|----------------------+-------+-----|
+| Declare variable     | True | False |
+| Reassign variable    | True | False |
+| Mutate array/object  | True | False |
+
+* Active Recall Questions
+
+1. Can you reassign a ~const~ variable?
+2. Can you ~.push()~ to a ~const~ array?
+3. When should you use ~let~?
+
+** Answers
+1. No
+2. Yes (mutation is allowed)
+3. When you need to reassign the variable

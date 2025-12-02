@@ -1,0 +1,133 @@
+#+TITLE: Spread Operator ...
+#+FILETAGS: :javascript:syntax:immutable:arrays:
+
+* Big Questions
+
+** What is this?
+Syntax that "spreads out" array/object items into individual elements.
+
+** Why is this important?
+Main way to copy arrays/objects without mutation.
+
+** When will I need this?
+- Copying arrays before sorting
+- Combining arrays
+- Adding items immutably
+- Copying objects
+
+** How does it work?
+~...array~ expands to all items: ~...[1,2,3]~ becomes ~1, 2, 3~
+
+* ELI5 Definition
+
+Imagine a box of LEGO bricks. The spread operator ~...~ is like dumping out all the bricks. You're not looking at "a box" anymore, you're looking at individual bricks spread out.
+
+* Code Examples
+
+** Copying an array
+#+begin_src javascript
+let original = [1, 2, 3];
+let copy = [...original];
+// copy = [1, 2, 3]
+// They're two separate arrays now!
+
+copy.push(4);
+// copy = [1, 2, 3, 4]
+// original = [1, 2, 3]  (unchanged!)
+#+end_src
+
+** Combining arrays
+#+begin_src javascript
+let arr1 = [1, 2];
+let arr2 = [3, 4];
+let combined = [...arr1, ...arr2];
+// combined = [1, 2, 3, 4]
+#+end_src
+
+** Adding items immutably
+#+begin_src javascript
+let tags = ['Web', 'AI'];
+let newTags = [...tags, 'Games'];
+// newTags = ['Web', 'AI', 'Games']
+// tags = ['Web', 'AI']  (unchanged!)
+#+end_src
+
+** From my code
+#+begin_src javascript
+// From my projects page:
+results = [...results];  // Copy before sorting!
+
+// From toggleTag function:
+selectedTags = [...selectedTags, tag];  // Add without mutation
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+[...array]              // Copy array
+[...arr1, ...arr2]      // Combine arrays
+[...array, newItem]     // Add to end
+[newItem, ...array]     // Add to start
+#+end_src
+
+* Mutation?
+
+*NO* - Creates NEW arrays/objects, originals unchanged
+
+*This is the opposite of ~.push()~ which mutates!*
+
+* Comparison
+
+** Mutating way (.push)
+#+begin_src javascript
+let tags = ['Web'];
+tags.push('AI');
+// tags changed directly
+#+end_src
+
+** Immutable way (spread)
+#+begin_src javascript
+let tags = ['Web'];
+let newTags = [...tags, 'AI'];
+// tags unchanged, newTags is new array
+#+end_src
+
+* Why I Need This
+
+** From my projects page
+#+begin_src javascript
+// copy before sorting
+results = [...results];
+
+// Why? Because .sort() mutates!
+results.sort(...);  // Safe to mutate the copy
+#+end_src
+
+** In Svelte/React
+#+begin_src javascript
+// BAD (mutates state):
+selectedTags.push(tag);
+
+// GOOD (creates new state):
+selectedTags = [...selectedTags, tag];
+#+end_src
+
+* With Objects (Bonus)
+
+#+begin_src javascript
+let user = { name: 'Bob', age: 25 };
+let updated = { ...user, age: 26 };
+// updated = { name: 'Bob', age: 26 }
+// user = { name: 'Bob', age: 25 }  (unchanged)
+#+end_src
+
+* Active Recall Questions
+
+1. How do you copy an array?
+2. Does spread operator mutate?
+3. What's the difference between ~arr.push(x)~ and ~[...arr, x]~?
+
+** Answers
+1. ~let copy = [...original]~
+2. No
+3. ~.push()~ mutates original, spread creates new array

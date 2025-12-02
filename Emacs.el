@@ -486,6 +486,36 @@
 (global-set-key (kbd "C-c f j") 'forge/open-journal)
 (global-set-key (kbd "C-c f c") 'forge/caveman-q)
 
+;; JavaScript Wiki directory
+(setq my/js-wiki-dir (expand-file-name "wiki/javascript" user-emacs-directory))
+
+(defun my/open-js-wiki ()
+  "Open JavaScript wiki index"
+  (interactive)
+  (find-file (expand-file-name "index.org" my/js-wiki-dir)))
+
+(defun my/js-wiki-search ()
+  "Search JavaScript wiki files using grep"
+  (interactive)
+  (let ((default-directory my/js-wiki-dir))
+    (counsel-rg "")))
+
+(defun my/js-wiki-new-entry ()
+  "Create new wiki entry"
+  (interactive)
+  (let ((title (read-string "Entry title: ")))
+    (find-file (expand-file-name 
+                (concat (downcase (replace-regexp-in-string " " "-" title)) ".org")
+                my/js-wiki-dir))
+    (insert (format "#+TITLE: %s\n#+FILETAGS: :javascript:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src javascript\n\n#+end_src\n" title))
+    (goto-char (point-min))
+    (forward-line 4)))
+
+;; Keybindings
+(global-set-key (kbd "C-c w j") 'my/open-js-wiki)
+(global-set-key (kbd "C-c w s") 'my/js-wiki-search)
+(global-set-key (kbd "C-c w n") 'my/js-wiki-new-entry)
+
 (defun open-init-file ()
   "Open Emacs.org for editing"
   (interactive)

@@ -1,0 +1,90 @@
+#+TITLE: .push() Method
+#+FILETAGS: :javascript:array:mutating:
+
+* Big Questions
+
+** What is this?
+An array method that adds one or more items to the END of an array.
+
+** Why is this important?
+Most common way to add items to arrays.
+
+** When will I need this?
+- Adding new tasks to a todo list
+- Building up results in a loop
+- Appending data dynamically
+
+** How does it work?
+Modifies the original array by adding items to the end. Returns the new length.
+
+* ELI5 Definition
+
+You have a line of people. ~.push()~ is like telling someone to join the line at the BACK. The line itself gets longer—you changed the original line.
+
+* Code Examples
+
+** Basic usage
+#+begin_src javascript
+let projects = ['Portfolio', 'Game', 'Blog'];
+projects.push('Store');
+// projects = ['Portfolio', 'Game', 'Blog', 'Store']
+#+end_src
+
+** Multiple items
+#+begin_src javascript
+let nums = [1, 2, 3];
+nums.push(4, 5, 6);
+// nums = [1, 2, 3, 4, 5, 6]
+#+end_src
+
+** Returns new length
+#+begin_src javascript
+let tags = ['Web'];
+let newLength = tags.push('AI');
+// tags = ['Web', 'AI']
+// newLength = 2
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+array.push(item)         // Add one item
+array.push(item1, item2) // Add multiple items
+#+end_src
+
+Always adds to the END of array.
+
+* Mutation?
+
+✅ *YES* - Modifies the original array directly
+
+* Common Use Case
+
+** Building results in a loop
+#+begin_src javascript
+let results = [];
+for (let i = 0; i < 5; i++) {
+    results.push(i * 2);
+}
+// results = [0, 2, 4, 6, 8]
+#+end_src
+
+* Related Methods
+
+| Method              | Where it adds/removes | Mutates? |
+|---------------------+-----------------------+----------|
+| ~.push(item)~       | Adds to END           | ✅ YES   |
+| ~.pop()~            | Removes from END      | ✅ YES   |
+| ~.unshift(item)~    | Adds to START         | ✅ YES   |
+| ~.shift()~          | Removes from START    | ✅ YES   |
+
+* Active Recall Questions
+
+1. Does ~.push()~ mutate?
+2. Where does ~.push()~ add items?
+3. What does ~.push()~ return?
+
+** Answers
+1. Yes
+2. To the end of the array
+3. The new length of the array

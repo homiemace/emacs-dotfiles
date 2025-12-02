@@ -1,0 +1,77 @@
+#+TITLE: .map() Method
+#+FILETAGS: :javascript:array:immutable:
+
+* Big Questions
+
+** What is this?
+An array method that creates a NEW array by transforming every item.
+
+** Why is this important?
+Main way to transform data without mutating the original array.
+
+** When will I need this?
+- Doubling all numbers
+- Converting names to uppercase
+- Adding 10 points to all scores
+- Any transformation applied to every item
+
+** How does it work?
+Runs a function on each item. Whatever the function returns becomes the new value in the new array.
+
+* ELI5 Definition
+
+You have a line of people. ~.map()~ is like asking each person to put on a hat, then they walk to a NEW line. The original line is still there without hats—you made a copy of the line where everyone has hats.
+
+* Code Examples
+
+** Example 1 (From Tutorial)
+#+begin_src javascript
+let numbers = [5, 10, 15];
+let doubled = numbers.map(n => n * 2);
+// doubled = [10, 20, 30]
+// numbers = [5, 10, 15] (unchanged)
+#+end_src
+
+** My Own Example
+#+begin_src javascript
+let scores = [85, 90, 78];
+let curved = scores.map(score => score + 5);
+// curved = [90, 95, 83]
+// scores = [85, 90, 78] (unchanged)
+#+end_src
+
+** Real Code I Used
+#+begin_src javascript
+// From my projects page:
+let result = scores.map(s => s + 10);
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+array.map(item => transformation)
+//        ↑      ↑
+//     parameter  what to do to it
+#+end_src
+
+Every item gets transformed → all items stay (array length doesn't change)
+
+* Mutation?
+
+❌ *NO* - Creates a NEW array, original is unchanged
+
+* Key Difference from .filter()
+
+- ~.map()~ → same number of items, transformed
+- ~.filter()~ → potentially fewer items, unchanged
+
+* Active Recall Questions
+
+1. Does ~.map()~ change the length of the array?
+2. What does ~.map()~ return?
+3. Write code to triple all numbers in an array
+
+** Answers
+1. No (unless you return undefined, but generally no)
+2. A new array with transformed items
+3. ~nums.map(n => n * 3)~

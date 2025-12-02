@@ -1,0 +1,81 @@
+#+TITLE: .filter() Method
+#+FILETAGS: :javascript:array:immutable:
+
+* Big Questions
+
+** What is this?
+An array method that creates a NEW array containing only items that pass a test.
+
+** Why is this important?
+It's the main way to remove unwanted items from arrays without mutating the original.
+
+** When will I need this?
+- Filtering projects by tags
+- Removing completed tasks
+- Finding users over age 18
+- Any time you need a subset of an array
+
+** How does it work?
+Tests each item with a function. If function returns true, item goes in new array. If false, item is excluded.
+
+* ELI5 Definition
+
+Imagine you have a bag of mixed candies. ~.filter()~ is like dumping them out, picking only the red ones, and putting those in a NEW bag. The original bag is still full of mixed candies—you didn't touch it.
+
+* Code Examples
+
+** Example 1 (From Tutorial)
+#+begin_src javascript
+let nums = [1, 5, 10, 15, 20];
+let result = nums.filter(n => n >= 10);
+// result = [10, 15, 20]
+// nums = [1, 5, 10, 15, 20] (unchanged)
+#+end_src
+
+** My Own Example
+#+begin_src javascript
+let tags = ['Web', 'AI', 'Games', 'Blog'];
+let longTags = tags.filter(tag => tag.length > 3);
+// longTags = ['Games', 'Blog']
+// tags = ['Web', 'AI', 'Games', 'Blog'] (unchanged)
+#+end_src
+
+** Real Code I Used
+#+begin_src javascript
+// From my projects page:
+data.projects.filter((project) => {
+    return project.tags.includes(tag.label);
+})
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+array.filter(item => condition)
+//           ↑      ↑
+//        parameter  test (returns true/false)
+#+end_src
+
+If test is true → keep item
+If test is false → exclude item
+
+* Mutation?
+
+❌ *NO* - Creates a NEW array, original is unchanged
+
+* Related Concepts
+
+- Compare to ~.map()~ → transforms items instead of filtering
+- Compare to ~.push()~ → mutates instead of creating new array
+- Works with: ~.length~, arrow functions, comparison operators
+
+* Active Recall Questions
+
+1. Does ~.filter()~ mutate the original array?
+2. What does ~.filter()~ return if nothing passes the test?
+3. Write code to filter numbers greater than 50
+
+** Answers
+1. No
+2. Empty array ~[]~
+3. ~nums.filter(n => n > 50)~

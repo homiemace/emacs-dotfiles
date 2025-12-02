@@ -1,0 +1,63 @@
+#+TITLE: JavaScript Fundamentals Wiki
+#+AUTHOR: HomieMace
+#+DATE: 2025
+
+My personal reference for JavaScript concepts learned while building projects.
+
+* Table of Contents
+
+** Array Methods
+- [[file:filter-method.org][.filter()]] - Create new array with items that pass test
+- [[file:map-method.org][.map()]] - Transform all items into new array
+- [[file:push-method.org][.push()]] - Add items to end (mutates)
+
+** Core Concepts
+- [[file:mutation.org][Mutation]] - Understanding what changes vs what creates new
+- [[file:let-vs-const.org][let vs const]] - When to use each variable declaration
+- [[file:array-index.org][Array Index Notation]] - Accessing items with [0], [1], etc.
+- [[file:length-property.org][.length Property]] - Getting size of arrays/strings
+- [[file:spread-operator.org][Spread Operator ...]] - Copying and combining arrays
+
+** Syntax
+- [[file:arrow-functions.org][Arrow Functions =>]] - Modern function shorthand
+
+* Quick Reference
+
+** Non-Mutating (Safe)
+- ~.filter()~
+- ~.map()~
+- ~[...array]~ (spread)
+
+** Mutating (Changes Original)
+- ~.push()~
+- ~.pop()~
+- ~array[0] = ...~
+- ~.sort()~
+
+* Review Schedule
+
+- First review: 1 hour after learning
+- Second review: Next day
+- Third review: 3 days later
+- Fourth review: 1 week later
+- Fifth review: 1 month later
+
+* Active Recall Practice
+
+Test yourself without looking at notes:
+
+1. What's the difference between ~.map()~ and ~.filter()~?
+2. Name 3 methods that mutate
+3. How do you copy an array?
+4. When should you use ~let~ vs ~const~?
+5. What does ~.length~ return?
+
+* Tags
+
+All files are tagged with:
+- ~:javascript:~ for general JS concepts
+- ~:array:~ for array-specific
+- ~:immutable:~ for non-mutating operations
+- ~:mutating:~ for mutating operations
+- ~:fundamentals:~ for core concepts
+- ~:syntax:~ for language syntax

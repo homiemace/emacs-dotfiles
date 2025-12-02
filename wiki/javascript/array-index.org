@@ -1,0 +1,97 @@
+#+TITLE: Array Index Notation [0]
+#+FILETAGS: :javascript:array:fundamentals:
+
+* Big Questions
+
+** What is this?
+Accessing or changing items in an array by their position number.
+
+** Why is this important?
+Core way to work with specific items in arrays.
+
+** When will I need this?
+- Getting first/last item
+- Changing a specific item
+- Any time you need one particular item
+
+** How does it work?
+Arrays use zero-based indexing: first item is ~[0]~, second is ~[1]~, etc.
+
+* ELI5 Definition
+
+Array is like a row of mailboxes numbered 0, 1, 2, 3... You can open any mailbox to READ what's inside, or PUT something new inside.
+
+* Code Examples
+
+** Reading values
+#+begin_src javascript
+let colors = ['red', 'blue', 'green'];
+//            [0]    [1]     [2]
+
+colors[0]  // 'red'
+colors[1]  // 'blue'
+colors[2]  // 'green'
+#+end_src
+
+** Writing/Replacing values
+#+begin_src javascript
+let tags = ['Web', 'AI', 'Games'];
+tags[1] = 'ML';
+// tags = ['Web', 'ML', 'Games']
+//                ↑ replaced
+#+end_src
+
+** From my learning
+#+begin_src javascript
+let scores = [100, 85, 92];
+scores[1] = scores[1] + 5;
+// scores = [100, 90, 92]
+//                ↑ 85 became 90
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+array[index]        // READ
+array[index] = val  // WRITE (mutate)
+#+end_src
+
+* Mutation?
+
+- Reading: ❌ NO
+- Writing: ✅ YES (changes original array)
+
+* Common Beginner Mistake I Made
+
+I thought ~array[0] = 99~ would ADD 99 to the array.
+Actually it REPLACES the item at position 0.
+
+To ADD, use ~.push()~:
+#+begin_src javascript
+array.push(99)  // Adds to end
+#+end_src
+
+* Special Cases
+
+** Last item
+#+begin_src javascript
+let arr = [1, 2, 3, 4, 5];
+arr[arr.length - 1]  // 5 (last item)
+#+end_src
+
+** Out of bounds
+#+begin_src javascript
+let arr = [1, 2, 3];
+arr[10]  // undefined (doesn't exist)
+#+end_src
+
+* Active Recall Questions
+
+1. What index is the first item?
+2. Does reading ~array[0]~ mutate?
+3. What's the difference between ~array[0] = 99~ and ~array.push(99)~?
+
+** Answers
+1. 0
+2. No
+3. ~[0] = 99~ replaces first item, ~.push(99)~ adds to end

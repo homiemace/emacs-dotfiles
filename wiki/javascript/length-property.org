@@ -1,0 +1,121 @@
+#+TITLE: .length Property
+#+FILETAGS: :javascript:array:string:property:
+
+* Big Questions
+
+** What is this?
+A property that tells you how many items are in an array (or characters in a string).
+
+** Why is this important?
+Need to know sizes for loops, conditionals, and validation.
+
+** When will I need this?
+- Checking if array is empty
+- Looping through items
+- Filtering by string length
+- Getting last item of array
+
+** How does it work?
+Returns a number representing the count of items/characters.
+
+* ELI5 Definition
+
+If you have a box of crayons, ~.length~ is like counting how many crayons are in the box. It doesn't change the crayons, just tells you the count.
+
+* Code Examples
+
+** Array length
+#+begin_src javascript
+let tags = ['Web', 'AI', 'Games'];
+tags.length  // 3
+
+let empty = [];
+empty.length  // 0
+#+end_src
+
+** String length
+#+begin_src javascript
+let word = 'Hello';
+word.length  // 5
+
+let name = 'AI';
+name.length  // 2
+#+end_src
+
+** From my learning
+#+begin_src javascript
+let tags = ['Web', 'AI', 'Games', 'Blog'];
+let longTags = tags.filter(tag => tag.length > 3);
+// longTags = ['Games', 'Blog']
+//             (5 chars) (4 chars)
+#+end_src
+
+* Common Use Cases
+
+** Check if empty
+#+begin_src javascript
+if (selectedTags.length === 0) {
+    // No tags selected
+}
+#+end_src
+
+** Get last item
+#+begin_src javascript
+let arr = [1, 2, 3, 4, 5];
+let last = arr[arr.length - 1];  // 5
+#+end_src
+
+** Loop through array
+#+begin_src javascript
+for (let i = 0; i < arr.length; i++) {
+    console.log(arr[i]);
+}
+#+end_src
+
+** From my projects page
+#+begin_src javascript
+// Showing {filteredProjects.length} of {data.projects.length} projects
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+array.length   // Count of items
+string.length  // Count of characters
+#+end_src
+
+It's a PROPERTY (no parentheses), not a method.
+
+* Mutation?
+
+❌ *NO* - Reading ~.length~ doesn't change anything
+
+*BUT:* You CAN write to it (rare):
+#+begin_src javascript
+let arr = [1, 2, 3, 4, 5];
+arr.length = 3;
+// arr = [1, 2, 3]  (truncated!)
+#+end_src
+
+* Common Beginner Mistake I Made
+
+*WRONG:*
+#+begin_src javascript
+arr.length()  // Not a function!
+#+end_src
+
+*RIGHT:*
+#+begin_src javascript
+arr.length    // It's a property
+#+end_src
+
+* Active Recall Questions
+
+1. How do you get the number of items in an array?
+2. What's the index of the last item? (hint: use length)
+3. How do you check if an array is empty?
+
+** Answers
+1. ~array.length~
+2. ~array[array.length - 1]~
+3. ~array.length === 0~

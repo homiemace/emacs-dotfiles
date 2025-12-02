@@ -1,0 +1,91 @@
+#+TITLE: Mutation
+#+FILETAGS: :javascript:fundamentals:arrays:
+
+* Big Questions
+
+** What is this?
+Directly changing the original data structure (array, object, etc.)
+
+** Why is this important?
+Need to know when your original data is safe vs when it's being changed.
+
+** When will I need this?
+- Deciding which array method to use
+- Preventing bugs from unexpected data changes
+- Understanding React/Svelte state updates
+
+** How does it work?
+Some operations modify the original, others create a copy and modify that.
+
+* ELI5 Definition
+
+You have a LEGO tower. Mutation is when you add/remove blocks directly from YOUR tower. Non-mutation is when you build a COPY of your tower, then change the copy—your original tower is untouched.
+
+* Code Examples
+
+** MUTATION (changes original)
+#+begin_src javascript
+let nums = [1, 2, 3];
+nums.push(4);
+// nums = [1, 2, 3, 4] <- CHANGED
+
+let tags = ['Web', 'AI'];
+tags[0] = 'Design';
+// tags = ['Design', 'AI'] <- CHANGED
+#+end_src
+
+** NO MUTATION (creates new)
+#+begin_src javascript
+let nums = [1, 2, 3];
+let doubled = nums.map(n => n * 2);
+// nums = [1, 2, 3] <- UNCHANGED
+// doubled = [10, 20, 30] <- NEW
+
+let tags = ['Web', 'AI', 'Games'];
+let filtered = tags.filter(t => t.length > 2);
+// tags = ['Web', 'AI', 'Games'] <- UNCHANGED
+// filtered = ['Web', 'Games'] <- NEW
+#+end_src
+
+* Quick Reference Table
+
+| Method/Operation | Mutates? |
+|------------------+----------|
+| ~.push()~        | YES     |
+| ~.pop()~         | YES     |
+| ~.shift()~       | YES     |
+| ~.unshift()~     | YES     |
+| ~.splice()~      |  YES    |
+| ~.sort()~        |  YES    |
+| ~.reverse()~     | YES     |
+| ~.filter()~      |  NO     |
+| ~.map()~         |  NO     |
+| ~.slice()~       |  NO     |
+| ~array[0] = ...~ |  YES    |
+| ~[...array]~     |  NO     |
+
+* Real Code I Used
+
+#+begin_src javascript
+// From Sploot Team project page - preventing mutation before sort:
+results = [...results];  // Copy first!
+results.sort(...);       // Now safe to mutate the copy
+#+end_src
+
+* Vocabulary
+
+- *In-place modification:* Changing the original directly (mutation)
+- *Direct mutation:* Modifying the data structure itself
+- *Immutable operations:* Methods that DON'T change the original
+- *Mutating operations:* Methods that DO change the original
+
+* Active Recall Questions
+
+1. Name 3 methods that mutate
+2. Name 3 methods that don't mutate
+3. How do you make a copy of an array?
+
+** Answers
+1. ~.push()~, ~.pop()~, ~.splice()~, ~array[0] = ...~
+2. ~.filter()~, ~.map()~, ~.slice()~
+3. ~[...array]~ or ~array.slice()~

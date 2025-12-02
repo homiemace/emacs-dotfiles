@@ -1,0 +1,108 @@
+#+TITLE: Arrow Functions =>
+#+FILETAGS: :javascript:syntax:functions:
+
+* Big Questions
+
+** What is this?
+Shorthand syntax for writing functions.
+
+** Why is this important?
+Used everywhere in modern JavaScript, especially with array methods.
+
+** When will I need this?
+- ~.filter()~, ~.map()~, ~.every()~, etc.
+- Event handlers (~onclick~)
+- Callbacks
+
+** How does it work?
+~(parameters) => expression~ is shorthand for ~function(parameters) { return expression; }~
+
+* ELI5 Definition
+
+Instead of writing "I am going to make a function that does..." you just say "do this →"
+
+* Code Examples
+
+** Full function syntax
+#+begin_src javascript
+numbers.filter(function(n) {
+    return n >= 10;
+})
+#+end_src
+
+** Arrow function (shortened)
+#+begin_src javascript
+numbers.filter(n => n >= 10)
+//              ↑  ↑  ↑
+//            param => what to return
+#+end_src
+
+** My Own Example
+#+begin_src javascript
+// Full version I COULD write:
+let doubled = nums.map(function(num) {
+    return num * 2;
+});
+
+// Arrow version I ACTUALLY write:
+let doubled = nums.map(num => num * 2);
+#+end_src
+
+* When I Use Each Part
+
+** Single parameter (no parentheses needed)
+#+begin_src javascript
+.filter(n => n > 10)
+#+end_src
+
+** Multiple parameters (need parentheses)
+#+begin_src javascript
+.sort((a, b) => a - b)
+#+end_src
+
+** No parameters (empty parentheses)
+#+begin_src javascript
+let greet = () => console.log('Hello');
+#+end_src
+
+** Multiple lines (need braces and return)
+#+begin_src javascript
+.map(x => {
+    let doubled = x * 2;
+    return doubled + 1;
+})
+#+end_src
+
+** Single line with one expression (implicit return)
+#+begin_src javascript
+.map(x => x * 2)  // Returns automatically
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_example
+(params) => expression     // One-liner, auto-return
+(params) => { code }       // Multi-line, need explicit return
+#+end_example
+
+* Real Code I Used
+
+#+begin_src javascript
+// From my projects page:
+selectedTags.filter((t) => t !== tag)
+
+data.projects.filter((project) => {
+    return project.tags.includes(tag.label);
+})
+#+end_src
+
+* Active Recall Questions
+
+1. Convert to arrow function: ~function(x) { return x + 5; }~
+2. When do you need parentheses around parameters?
+3. When do you need braces ~{}~ and ~return~?
+
+** Answers
+1. ~x => x + 5~
+2. Multiple parameters: ~(a, b) =>~ or no parameters: ~() =>~
+3. Multi-line functions need both ~{}~ and ~return~
