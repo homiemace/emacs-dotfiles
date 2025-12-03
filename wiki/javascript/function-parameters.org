@@ -1,0 +1,203 @@
+#+TITLE: Function Parameters
+#+FILETAGS: :javascript:fundamentals:functions:
+
+* Big Questions
+
+** What is this?
+Variables that receive values when a function is called.
+
+** Why is this important?
+Parameters let functions work with different data each time they're called.
+
+** When will I need this?
+Every time you write a function that needs input data to work with.
+
+** How does it work?
+When you call a function with arguments, those values get assigned to the parameter variables.
+
+* ELI5 Definition
+
+A parameter is like a mailbox on a function. When you call the function, you put something IN the mailbox (the argument). Inside the function, you can open the mailbox and use what's inside.
+
+BUT: If you never open the mailbox and use what's inside, why have the mailbox at all?
+
+* Code Examples
+
+** Basic Parameter Usage
+#+begin_src javascript
+function greet(name) {
+//            ↑
+//         parameter
+
+    console.log("Hello, " + name);
+    //                      ↑
+    //                   USING the parameter
+}
+
+greet("Homie");  // "Hello, Homie"
+//     ↑
+//  argument (the value you pass)
+#+end_src
+
+** Multiple Parameters
+#+begin_src javascript
+function add(a, b) {
+//          ↑  ↑
+//       two parameters
+
+    return a + b;  // Using BOTH parameters
+}
+
+add(5, 3);  // 8
+//  ↑  ↑
+// two arguments
+#+end_src
+
+** From My Real Bug
+#+begin_src javascript
+// BROKEN - Parameter not used
+function toggleSort(type) {
+//                  ↑
+//            I declared this but...
+
+    if (sortOrder === 'desc') {
+        sortOrder = 'asc';
+    } else {
+        sortOrder = 'desc';
+    }
+    // ...never used it! What's the point?
+}
+
+// FIXED - Parameter actually used
+function toggleSort(type) {
+    if (sortBy === type) {  // <- NOW using 'type'
+        // toggle order
+        sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+        sortBy = type;  // <- Using 'type' here too!
+        sortOrder = 'desc';
+    }
+}
+#+end_src
+
+** What Was Happening in My Bug
+
+#+begin_src javascript
+// Starting state:
+sortBy = 'date'
+sortOrder = 'desc'
+
+// I clicked Name button which called:
+toggleSort('name')
+//          ↑
+//       This went into 'type' parameter
+
+// But my function never used 'type'!
+// So sortBy stayed as 'date'
+// Only sortOrder changed
+
+// Result:
+sortBy = 'date'     // <-  WRONG! Should be 'name'
+sortOrder = 'asc'   // <- Changed, but for wrong sort type
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+function functionName(parameter) {
+//                    ↑
+//                 declare it here
+
+    // DO SOMETHING with parameter
+    //                  ↑
+    //               use it here!
+}
+
+functionName(argument);
+//           ↑
+//        pass value here
+#+end_src
+
+**Key point:** If you declare a parameter but never use it inside the function, it's a red flag! Either:
+1. You forgot to use it (bug!)
+2. You don't need it (remove it!)
+
+* Vocabulary
+
+- *Parameter:* The variable name in the function definition
+- *Argument:* The actual value passed when calling the function
+- *Unused parameter:* A parameter declared but never used (often a bug!)
+
+#+begin_src javascript
+function example(parameter) {  // <- parameter
+//              ↑
+    console.log(parameter);    // <- using parameter
+}
+
+example(argument);  // ← argument
+//      ↑
+#+end_src
+
+* Common Mistakes I Made
+
+** Mistake 1: Declaring but not using
+#+begin_src javascript
+function toggleSort(type) {  // Declared 'type'
+    sortOrder = 'asc';       // Never used 'type'!
+}
+#+end_src
+
+** Mistake 2: Using wrong variable name
+#+begin_src javascript
+function greet(name) {
+    console.log("Hello, " + username);  // 'username' doesn't exist!
+    //                      ↑
+    //                   should be 'name'
+}
+#+end_src
+
+* How I Found The Bug
+
+Claude asked me: "What does ~type~ do in this function?"
+
+I looked at my code and realized: **Nothing. It doesn't do anything.**
+
+That's when I understood I needed to actually USE the parameter:
+#+begin_src javascript
+sortBy = type;  // ← This line was missing!
+#+end_src
+
+* TypeScript Bonus
+
+When using TypeScript, you can specify what TYPE the parameter should be:
+
+#+begin_src javascript
+function toggleSort(type: 'name' | 'date') {
+//                  ↑
+//               parameter name
+//                       ↑
+//                    must be one of these two strings
+    sortBy = type;
+}
+
+toggleSort('name');   // Works
+toggleSort('price');  // Error. Not 'name' or 'date'
+#+end_src
+
+* Related Concepts
+
+- Arrow functions also use parameters: ~(param) => { }~
+- Array methods use parameters: ~.filter(item => ...)~
+  - ~item~ is a parameter that receives each array element
+- Parameters are LOCAL to the function (can't use them outside)
+
+* Active Recall Questions
+
+1. What's the difference between a parameter and an argument?
+2. If you declare a parameter but never use it, what might that mean?
+3. Fix this bug: ~function double(num) { return x * 2; }~
+
+** Answers
+1. Parameter = variable in function definition, Argument = value passed when calling
+2. Either you forgot to use it (bug) or you don't need it (should remove)
+3. ~function double(num) { return num * 2; }~ (use ~num~ not ~x~)

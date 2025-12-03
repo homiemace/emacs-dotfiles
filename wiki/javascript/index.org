@@ -17,6 +17,7 @@ My personal reference for JavaScript concepts learned while building projects.
 - [[file:array-index.org][Array Index Notation]] - Accessing items with [0], [1], etc.
 - [[file:length-property.org][.length Property]] - Getting size of arrays/strings
 - [[file:spread-operator.org][Spread Operator ...]] - Copying and combining arrays
+- [[file:function-parameters.org][Function Parameters]] - Declaring and using parameters vs arguments
 
 ** Syntax
 - [[file:arrow-functions.org][Arrow Functions =>]] - Modern function shorthand
