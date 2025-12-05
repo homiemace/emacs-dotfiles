@@ -184,7 +184,7 @@
         company-idle-delay 0.3))
 
 (use-package magit
-  :bind ("C-x g" . magit-status))
+  :ensure t)
 
 (defun efs/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -206,10 +206,15 @@
 (use-package lsp-ivy)
 
 (use-package typescript-mode
-  :mode "\\.ts\\'"
+  :mode (("\\.ts\\'" . typescript-mode)
+	 ("\\.tsx\\'" . typescript-mode))
   :hook (typescript-mode . lsp-deferred)
   :config
   (setq typescript-indent-level 2))
+
+(use-package svelte-mode
+  :mode "\\.svelte\\'"
+  :hook (svelte-mode . lsp-deferred))
 
 (use-package projectile
   :init (projectile-mode +1)

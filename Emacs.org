@@ -282,7 +282,7 @@ Remove unnecessary UI elements and enable useful modes.
 
 #+begin_src emacs-lisp
 (use-package magit
-  :bind ("C-x g" . magit-status))
+  :ensure t)
 #+end_src
 
 ** Languages
@@ -329,7 +329,8 @@ Remove unnecessary UI elements and enable useful modes.
 #+begin_src emacs-lisp
 
   (use-package typescript-mode
-    :mode "\\.ts\\'"
+    :mode (("\\.ts\\'" . typescript-mode)
+  	 ("\\.tsx\\'" . typescript-mode))
     :hook (typescript-mode . lsp-deferred)
     :config
     (setq typescript-indent-level 2))
@@ -342,6 +343,24 @@ Install language server on machine
 
 bun install -g typescript-language-server typescript
 
+#+end_src
+
+*** Svelte
+
+#+begin_src emacs-lisp
+
+  (use-package svelte-mode
+    :mode "\\.svelte\\'"
+    :hook (svelte-mode . lsp-deferred))
+
+#+end_src
+
+Install language server on machine
+
+#+begin_src shell :tangle no
+
+bun install -g svelte-language-server svelte
+  
 #+end_src
 
 ** Projectile - Project Management
