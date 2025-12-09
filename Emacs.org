@@ -363,6 +363,24 @@ bun install -g svelte-language-server svelte
   
 #+end_src
 
+*** Tailwind CSS
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-tailwindcss
+    :init
+    (setq lsp-tailwindcss-add-on-mode t))
+
+#+end_src
+
+Install language server on machine
+
+#+begin_src shell :tangle no
+
+bun install -g @tailwindcss/language-server
+
+#+end_src
+
 ** Projectile - Project Management
 
 #+begin_src emacs-lisp

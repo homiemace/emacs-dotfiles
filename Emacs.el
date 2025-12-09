@@ -216,6 +216,10 @@
   :mode "\\.svelte\\'"
   :hook (svelte-mode . lsp-deferred))
 
+(use-package lsp-tailwindcss
+  :init
+  (setq lsp-tailwindcss-add-on-mode t))
+
 (use-package projectile
   :init (projectile-mode +1)
   :bind (:map projectile-mode-map
