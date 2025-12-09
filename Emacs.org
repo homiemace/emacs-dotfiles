@@ -69,6 +69,18 @@ Set up package archives and use-package.
   (auto-package-update-at-time "09:00"))
 #+end_src
 
+** PATH from Shell
+
+Ensure Emacs inherits PATH from shell (needed for npm, bun, etc.)
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+#+end_src
+
 * No-Littering
 
 Keep =.emacs.d= clean and organized.
@@ -292,17 +304,17 @@ Remove unnecessary UI elements and enable useful modes.
 **** lsp-mode
 
 #+begin_src emacs-lisp
-(defun efs/lsp-mode-setup ()
-  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode))
+  (defun efs/lsp-mode-setup ()
+    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+    (lsp-headerline-breadcrumb-mode))
 
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :hook (lsp-mode . efs/lsp-mode-setup)
-  :init
-  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-  :config
-  (lsp-enable-which-key-integration t))
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred)
+    :hook (lsp-mode . efs/lsp-mode-setup)
+    :init
+    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t))
 #+end_src
 
 **** lsp-ui
@@ -341,7 +353,7 @@ Install language server on machine
 
 #+begin_src shell :tangle no
 
-bun install -g typescript-language-server typescript
+npm install -g typescript-language-server typescript
 
 #+end_src
 
@@ -359,7 +371,7 @@ Install language server on machine
 
 #+begin_src shell :tangle no
 
-bun install -g svelte-language-server svelte
+npm install -g svelte-language-server svelte
   
 #+end_src
 
@@ -377,7 +389,7 @@ Install language server on machine
 
 #+begin_src shell :tangle no
 
-bun install -g @tailwindcss/language-server
+npm install -g @tailwindcss/language-server
 
 #+end_src
 

@@ -44,6 +44,12 @@
   (auto-package-update-maybe)
   (auto-package-update-at-time "09:00"))
 
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
 (use-package no-littering
   :ensure t
   :config
