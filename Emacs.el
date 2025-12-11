@@ -46,9 +46,13 @@
 
 (use-package exec-path-from-shell
   :ensure t
+  :if (memq system-type '(gnu/linux darwin))  ; only on linux/macos
   :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  (setq exec-path-from-shell-arguments nil)
+  ;; auto-detect the shell
+  (when (eq system-type 'darwin)  ; macOS
+    (setq exec-path-from-shell-shell-name "/opt/homebrew/bin/fish"))
+  (exec-path-from-shell-initialize))
 
 (use-package no-littering
   :ensure t
