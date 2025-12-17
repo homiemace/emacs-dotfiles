@@ -1,0 +1,165 @@
+#+TITLE: Event Propagation (Bubbling)
+#+FILETAGS: :javascript:events:dom:
+
+* Big Questions
+
+** What is this?
+When you click an element, the click event travels UP the DOM tree to all parent elements.
+
+** Why is this important?
+Clicks can trigger unintended handlers on parent elements, causing bugs like dropdowns that won't stay open.
+
+** When will I need this?
+Any time you have nested clickable elements - buttons inside divs, dropdowns, modals.
+
+** How does it work?
+Click events start at the clicked element and "bubble up" to each parent, triggering their click handlers unless stopped.
+
+* ELI5 Definition
+
+You're in a building with rooms inside rooms. You shout in the innermost room. Your voice travels outward:
+1. Inner room hears it
+2. Middle room hears it
+3. Outer room hears it
+4. The building itself hears it
+
+That's event bubbling. Click a button ->  button hears it ->  parent div hears it ->  window hears it. Each layer gets the event.
+
+* Code Examples
+
+** What Happens Without stopPropagation
+#+begin_src javascript
+<svelte:window onclick={() => console.log("Window!")}>
+
+<div onclick={() => console.log("Div!")}>
+    <button onclick={() => console.log("Button!")}>
+        Click me
+    </button>
+</div>
+#+end_src
+
+Click the button, output:
+1. "Button!"
+2. "Div!"
+3. "Window!"
+
+All three fire because the event bubbles up the tree.
+
+** From My Real Bug
+#+begin_src javascript
+// BROKEN - Dropdown closes immediately
+<button onclick={() => openMobileIndex = 1}>
+    Open dropdown
+</button>
+
+<svelte:window onclick={() => openMobileIndex = null} />
+
+// What happened:
+// 1. Click button -> openMobileIndex = 1 (opens)
+// 2. Click bubbles to window -> openMobileIndex = null (closes)
+// 3. Net result: opens and closes instantly!
+#+end_src
+
+** FIXED - Stop the bubble
+#+begin_src javascript
+<button onclick={(e) => {
+    e.stopPropagation();  // STOP here, don't bubble to window
+    openMobileIndex = 1;
+}}>
+    Open dropdown
+</button>
+
+<svelte:window onclick={() => openMobileIndex = null} />
+
+// What happens now:
+// 1. Click button → openMobileIndex = 1 (opens)
+// 2. e.stopPropagation() stops the event from going further
+// 3. Window handler never fires
+// 4. Dropdown stays open!
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+// When you have parent with click handler + child with different click handler:
+
+<parent onclick={closeThings}>
+    <child onclick={(e) => {
+        e.stopPropagation();  // Always do this first!
+        openThings();
+    }}>
+#+end_src
+
+**Key point:** If the child's action conflicts with the parent's action, use `e.stopPropagation()` in the child.
+
+* Vocabulary
+
+- *Event Bubbling:* The event traveling up the DOM tree from child to parent to grandparent...
+- *stopPropagation():* Method that stops the event from bubbling further
+- *Event Target:* The actual element that was clicked (the innermost one)
+
+* Common Mistakes I Made
+
+** Mistake 1: Forgot stopPropagation
+#+begin_src javascript
+// No e.stopPropagation() so window handler fires immediately
+<button onclick={() => openDropdown()}>
+    Click
+</button>
+#+end_src
+
+** Mistake 2: Used stopPropagation everywhere unnecessarily
+#+begin_src javascript
+// Don't use it on EVERY button!
+// Only when child click should NOT trigger parent handler
+#+end_src
+
+* How I Found The Bug
+
+My mobile dropdown button wouldn't keep the dropdown open. Realized:
+1. Button click sets `openMobileIndex = 1`
+2. Event bubbles to `<svelte:window>`
+3. Window sets `openMobileIndex = null`
+4. Dropdown opens then immediately closes
+
+Adding `e.stopPropagation()` broke the chain at step 2.
+
+* TypeScript Bonus
+
+The event parameter needs typing:
+
+#+begin_src javascript
+<button onclick={(e: MouseEvent) => {
+//                 ↑
+//              Type the event parameter
+    e.stopPropagation();
+}}>
+#+end_src
+
+* Related Concepts
+
+- `e.preventDefault()` - Different! Stops default browser behavior (form submit, link navigation)
+- Event Capturing - Opposite direction of bubbling (parent to child, rarely used)
+- Click-outside detection - Intentionally uses event bubbling to window
+
+* Active Recall Questions
+
+1. What gets logged when clicking the button?
+   #+begin_src javascript
+   <div onclick={() => console.log("div")}>
+       <button onclick={() => console.log("button")}>Click</button>
+   </div>
+   #+end_src
+
+2. How do you stop a click event from reaching parent elements?
+
+3. Why does this fail to open the dropdown?
+   #+begin_src javascript
+   <window onclick={() => isOpen = false}>
+   <button onclick={() => isOpen = true}>Open</button>
+   #+end_src
+
+** Answers
+1. "button" then "div" (event bubbles up)
+2. Call `e.stopPropagation()` in the child's handler
+3. Button opens it, but event bubbles to window which closes it immediately

@@ -1,0 +1,233 @@
+#+TITLE: Boolean vs Index-Based State
+#+FILETAGS: :javascript:state:patterns:
+
+* Big Questions
+
+** What is this?
+Choosing between true/false (boolean) vs number to track which item is active/open.
+
+** Why is this important?
+Wrong choice causes bugs where multiple things open simultaneously when only one should.
+
+** When will I need this?
+Any time you have multiple similar elements but only want ONE active at a time.
+
+** How does it work?
+Boolean = on/off for everything together. Index = which specific one is on.
+
+* ELI5 Definition
+
+**Boolean = Light switch for whole room**
+- Flip on -> ALL lights turn on
+- Flip off -> ALL lights turn off
+- Can't control individual lights
+
+**Index = Remote with numbered buttons**
+- Press 1 -> Only light #1 turns on
+- Press 2 -> Only light #2 turns on
+- Press 1 again -> Light #1 turns off
+- Can control each light individually
+
+* Code Examples
+
+** THE BUG - Boolean for Multiple Items
+#+begin_src javascript
+let isOpen = $state(false);  // One boolean for MANY dropdowns
+
+{#each projects as project, index}
+    <button onclick={() => isOpen = true}>Open</button>
+    
+    {#if isOpen}
+        <div>Dropdown for project {index}</div>
+    {/if}
+{/each}
+
+// Click any button -> ALL 10 dropdowns appear!
+// Why? isOpen is true, every {#if isOpen} is true
+#+end_src
+
+** THE FIX - Index for Multiple Items
+#+begin_src javascript
+let openIndex = $state<number | null>(null);  // Track WHICH one
+
+{#each projects as project, index}
+    <button onclick={() => openIndex = index}>Open</button>
+    
+    {#if openIndex === index}
+        <div>Dropdown for project {index}</div>
+    {/if}
+{/each}
+
+// Click button #2 -> ONLY dropdown #2 appears
+// Why? openIndex is 2, only {#if 2 === 2} is true
+#+end_src
+
+** From My Real Bug - Desktop (Boolean OK)
+#+begin_src javascript
+// Only ONE filter dropdown exists
+// Boolean works fine!
+
+let isDropdownOpen = $state(false);
+
+<button onclick={() => isDropdownOpen = !isDropdownOpen}>
+    Filter
+</button>
+
+{#if isDropdownOpen}
+    <div>Filter options</div>
+{/if}
+
+// One thing to control → boolean is perfect
+#+end_src
+
+** From My Real Bug - Mobile (Needs Index)
+#+begin_src javascript
+// MANY mobile dropdowns (one per project card)
+// Boolean won't work!
+
+let openMobileIndex = $state<number | null>(null);
+
+{#each filteredProjects as project, index}
+    <button onclick={() => {
+        openMobileIndex = openMobileIndex === index ? null : index;
+        //                ↑
+        //     Toggle: if already open, close it. Else open this one.
+    }}>
+        Show tags
+    </button>
+
+    {#if openMobileIndex === index}
+        //   ↑
+        // Only show if THIS project's index matches
+        <div>Tags for {project.title}</div>
+    {/if}
+{/each}
+#+end_src
+
+** Side by Side Comparison
+#+begin_src javascript
+// Boolean approach:
+let isOpen = false;
+{#if isOpen} <!-- ALL match when true -->
+
+// Index approach:
+let openIndex = null;
+{#if openIndex === 0} <!-- Only first matches -->
+{#if openIndex === 1} <!-- Only second matches -->
+{#if openIndex === 2} <!-- Only third matches -->
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+// Decision tree:
+
+How many items exist?
+    ↓
+    ├─ Only 1 item total
+    │   → Use boolean
+    │   → let isOpen = $state(false)
+    │
+    └─ Multiple items (only one active at once)
+        → Use index
+        → let activeIndex = $state<number | null>(null)
+        → {#if activeIndex === index}
+#+end_src
+
+**Key insight:** It's not about how many states (open/closed), it's about how many ITEMS need individual control.
+
+* Vocabulary
+
+- *Boolean state:* true/false, affects all instances the same way
+- *Index state:* number (or null), identifies which specific instance
+- *null:* In index state, means "none selected/open"
+- *Index:* Position in array (0 = first, 1 = second, 2 = third...)
+
+* Common Mistakes I Made
+
+** Mistake 1: Boolean for multiple items
+#+begin_src javascript
+// 10 dropdowns, one boolean
+let isOpen = false;
+// Can't differentiate which dropdown should be open
+#+end_src
+
+** Mistake 2: Confusing null with false
+#+begin_src javascript
+// For index state:
+if (openIndex === false)  // Wrong! Index is number | null, not boolean
+if (openIndex === null)   // Correct! null means "nothing open"
+#+end_src
+
+** Mistake 3: Using truthy check instead of exact match
+#+begin_src javascript
+{#if openIndex}  // Wrong! True for ANY number, even 0
+{#if openIndex === index}  // Correct! Exact match only
+#+end_src
+
+** Mistake 4: Shared boolean between different features
+#+begin_src javascript
+// Used same isDropdownOpen for desktop AND mobile
+// Desktop opens -> mobile also opens! Bug!
+#+end_src
+
+* How I Found The Bug
+
+Used `isDropdownOpen` boolean for BOTH desktop filter and mobile dropdowns.
+
+Result:
+- Click desktop → mobile dropdowns opened too
+- Click any mobile button → ALL mobile dropdowns opened
+
+Realized: Boolean can't differentiate WHICH mobile dropdown. Needed separate states:
+- Desktop: `isDropdownOpen` (boolean, only 1 exists)
+- Mobile: `openMobileIndex` (number, many exist)
+
+* TypeScript Bonus
+
+#+begin_src javascript
+// Explicitly declare index state type
+let openIndex = $state<number | null>(null);
+//                     ↑        ↑
+//                  number   OR   null
+
+// null = nothing open
+// 0 = first item open
+// 1 = second item open
+// etc.
+
+// TypeScript catches mistakes:
+openIndex = false;  // Error! Expected number | null
+openIndex = 0;      // Works
+openIndex = null;   // Works
+#+end_src
+
+* Related Concepts
+
+- Tab navigation (index for active tab)
+- Accordion menus (index for expanded section)
+- Radio buttons (index for selected option)
+- Image galleries (index for current image)
+- Carousel/sliders (index for current slide)
+
+* Active Recall Questions
+
+1. You have 5 dropdown menus. User can only open one at a time. Boolean or index state?
+
+2. What's wrong here?
+   #+begin_src javascript
+   let isOpen = false;
+   {#each [0,1,2] as item}
+       {#if isOpen}<div>Dropdown</div>{/if}
+   {/each}
+   #+end_src
+
+3. If `openIndex = 2`, what does `{#if openIndex === 2}` return?
+
+4. What does `openIndex = null` mean in index-based state?
+
+** Answers
+1. Index state (number | null) - need to track WHICH one is open
+2. All 3 dropdowns show when isOpen is true (can't differentiate between them)
+3. true (only the 3rd item's condition is true, others false)
+4. Nothing is currently open/selected

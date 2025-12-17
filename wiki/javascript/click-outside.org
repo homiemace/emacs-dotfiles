@@ -1,0 +1,210 @@
+#+TITLE: Click Outside Detection
+#+FILETAGS: :javascript:events:patterns:
+
+* Big Questions
+
+** What is this?
+Detecting when a user clicks anywhere OUTSIDE a specific element on the page.
+
+** Why is this important?
+Standard UX pattern - close dropdowns, modals, tooltips when user clicks elsewhere.
+
+** When will I need this?
+Dropdowns, modals, tooltips, context menus, autocomplete - anything that should close when losing focus.
+
+** How does it work?
+Listen to ALL clicks on the page, check if click happened inside or outside your element.
+
+* ELI5 Definition
+
+You have a special box. For every click on the page, you ask: "Did they click inside my box or outside it?"
+
+If outside → close the box.
+If inside → keep it open.
+
+It's like a bouncer at a club - if someone enters through the door (inside the box), they're fine. If they try to enter through the wall (outside the box), alarm goes off.
+
+* Code Examples
+
+** Basic Pattern
+#+begin_src javascript
+let container;  // Will store reference to the DOM element
+
+function onWindowClick(e) {
+    // Is click target inside container?
+    if (container && !container.contains(e.target)) {
+        // NO - clicked outside
+        console.log("Close the thing!");
+    }
+}
+#+end_src
+
+** From My Real Bug
+#+begin_src javascript
+// The full pattern:
+
+let filterContainer: HTMLDivElement;
+let isDropdownOpen = $state(false);
+
+function onWindowClick(e: MouseEvent) {
+    if (filterContainer && !filterContainer.contains(e.target as Node)) {
+        isDropdownOpen = false;  // Close when clicking outside
+    }
+}
+
+// In template:
+<svelte:window onclick={onWindowClick} />
+
+<div bind:this={filterContainer}>
+//   ↑
+//   This stores the actual DOM element in filterContainer
+    <button onclick={toggleDropdown}>Filter</button>
+    {#if isDropdownOpen}
+        <div>Dropdown content</div>
+    {/if}
+</div>
+#+end_src
+
+** Breaking Down The Logic
+#+begin_src javascript
+if (filterContainer && !filterContainer.contains(e.target as Node))
+//  ↑ Part 1        ↑ Part 2
+
+// Part 1: filterContainer
+// - "Does the container exist?"
+// - Prevents crash if undefined
+
+// Part 2: !filterContainer.contains(e.target)
+// - filterContainer.contains(e.target) returns:
+//   - true if click is inside
+//   - false if click is outside
+// - The ! flips it:
+//   - !true = false (inside, don't close)
+//   - !false = true (outside, DO close)
+#+end_src
+
+** Visual Example
+#+begin_src javascript
+// Scenario 1: Click inside dropdown
+filterContainer.contains(clickedElement)  // true
+!filterContainer.contains(clickedElement) // false
+// if (false) - doesn't run, dropdown stays open
+
+// Scenario 2: Click outside dropdown
+filterContainer.contains(clickedElement)  // false
+!filterContainer.contains(clickedElement) // true
+// if (true) - runs! closes dropdown
+#+end_src
+
+* Pattern I Noticed
+
+#+begin_src javascript
+// The 4-step pattern:
+
+// 1. Declare variable for element reference
+let myElement;
+
+// 2. Bind it to the actual DOM element
+<div bind:this={myElement}>
+
+// 3. Listen to all clicks
+<svelte:window onclick={handleClick} />
+
+// 4. Check if click is outside
+function handleClick(e) {
+    if (myElement && !myElement.contains(e.target)) {
+        // Close/hide the element
+    }
+}
+#+end_src
+
+* Vocabulary
+
+- *bind:this:* Svelte directive that stores DOM element reference in a variable
+- *.contains():* DOM method checking if an element contains another element
+- *e.target:* The actual element that was clicked
+- *Window listener:* Event listener on `<svelte:window>` that catches ALL clicks
+
+* Common Mistakes I Made
+
+** Mistake 1: Forgot to bind the element
+#+begin_src javascript
+let container;  // Declared...
+
+function onClick(e) {
+    if (container && !container.contains(e.target)) {
+        // container is undefined! Never runs
+    }
+}
+
+// Missing: <div bind:this={container}>
+#+end_src
+
+** Mistake 2: Wrong logic (no ! operator)
+#+begin_src javascript
+if (container.contains(e.target)) {
+    isOpen = false;  // Wrong! Closes when clicking INSIDE
+}
+
+// Should be:
+if (!container.contains(e.target)) {
+    isOpen = false;  // Closes when clicking OUTSIDE
+}
+#+end_src
+
+** Mistake 3: Forgot existence check
+#+begin_src javascript
+// Crashes if container undefined:
+if (!container.contains(e.target))
+
+// Safe version:
+if (container && !container.contains(e.target))
+#+end_src
+
+* How I Found The Bug
+
+Dropdowns wouldn't close when clicking elsewhere on the page. Realized I had no mechanism to detect clicks outside the dropdown. Added window listener + contains check.
+
+* TypeScript Bonus
+
+#+begin_src javascript
+let container: HTMLDivElement;  // Type the element
+//             ↑
+//          Tells TS this will be a <div>
+
+function onClick(e: MouseEvent) {  // Type the event
+    if (container && !container.contains(e.target as Node)) {
+        //                                           ↑
+        //              Cast to Node for .contains()
+    }
+}
+#+end_src
+
+* Related Concepts
+
+- Modal dialogs (same pattern)
+- Autocomplete dropdowns
+- Context menus (right-click menus)
+- Tooltip dismissal
+- Color pickers, date pickers
+
+* Active Recall Questions
+
+1. What does `bind:this={myVar}` do?
+
+2. Translate to English: `if (box && !box.contains(e.target))`
+
+3. Fix this:
+   #+begin_src javascript
+   let dropdown;
+   function close(e) {
+       if (!dropdown.contains(e.target)) {
+           isOpen = false;
+       }
+   }
+   #+end_src
+
+** Answers
+1. Stores reference to the DOM element in variable `myVar`
+2. "If box exists AND clicked element is NOT inside box, then..."
+3. Add existence check: `if (dropdown && !dropdown.contains(e.target))`

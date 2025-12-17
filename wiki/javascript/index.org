@@ -19,6 +19,11 @@ My personal reference for JavaScript concepts learned while building projects.
 - [[file:spread-operator.org][Spread Operator ...]] - Copying and combining arrays
 - [[file:function-parameters.org][Function Parameters]] - Declaring and using parameters vs arguments
 
+** Events & Patterns
+- [[file:event-propagation.org][Event Propagation]] - How clicks bubble up the DOM tree
+- [[file:click-outside.org][Click Outside Detection]] - Close dropdowns when clicking elsewhere
+- [[file:boolean-vs-index.org][Boolean vs Index State]] - Choosing right state type for multiple items
+  
 ** Syntax
 - [[file:arrow-functions.org][Arrow Functions =>]] - Modern function shorthand
 
