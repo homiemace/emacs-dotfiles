@@ -187,6 +187,25 @@
           dired-use-ls-dired t
           dired-listing-switches "-alh --group-directories-first")))
 
+(use-package gptel
+:ensure t
+:commands (gptel)
+:init
+(setq gptel-model 'mixtral-8x7b-32768)
+:config
+(setq gptel-backend
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+        :key gptel-api-key
+        :models '(openai/gpt-3.5-turbo
+                  mistralai/mixtral-8x7b-instruct
+                  meta-llama/codellama-34b-instruct
+                  codellama/codellama-70b-instruct
+                  google/palm-2-codechat-bison-32k
+                  google/gemini-pro))))
+
 (use-package company
   :init (global-company-mode)
   :config
