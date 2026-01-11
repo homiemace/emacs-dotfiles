@@ -191,7 +191,8 @@
 :ensure t
 :commands (gptel)
 :init
-(setq gptel-model 'mixtral-8x7b-32768)
+(setq gptel-model 'mixtral-8x7b-instruct
+	gptel-use-tools t)
 :config
 (setq gptel-backend
       (gptel-make-openai "OpenRouter"
@@ -204,7 +205,13 @@
                   meta-llama/codellama-34b-instruct
                   codellama/codellama-70b-instruct
                   google/palm-2-codechat-bison-32k
-                  google/gemini-pro))))
+                  google/gemini-pro)
+        :request-params '(:transforms ["middle-out"]))))
+
+(use-package gptel-agent
+  :vc ( :url "https://github.com/karthink/gptel-agent"
+        :rev :newest)
+  :config (gptel-agent-update))
 
 (use-package company
   :init (global-company-mode)
