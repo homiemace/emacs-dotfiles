@@ -187,6 +187,18 @@
           dired-use-ls-dired t
           dired-listing-switches "-alh --group-directories-first")))
 
+(defun my/authinfo-openrouter-api-key ()
+  (require 'auth-source)
+  (let ((match (car (auth-source-search
+                     :host "openrouter.ai"
+                     :user "apikey"
+                     :require '(:secret)))))
+    (when match
+      (let ((secret (plist-get match :secret)))
+        (if (functionp secret)
+            (funcall secret)
+          secret)))))
+
 (use-package gptel
 :ensure t
 :commands (gptel)
@@ -212,6 +224,24 @@
   :vc ( :url "https://github.com/karthink/gptel-agent"
         :rev :newest)
   :config (gptel-agent-update))
+
+(use-package minuet
+    :config
+    (setq minuet-provider 'openai-compatible)
+    (setq minuet-request-timeout 2.5)
+    (setq minuet-auto-suggestion-throttle-delay 1.5)
+    (setq minuet-auto-suggestion-debounce-delay 0.6)
+
+    (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
+      (plist-put minuet-openai-compatible-options
+           :api-key #'my/authinfo-openrouter-api-key)
+    (plist-put minuet-openai-compatible-options :model "moonshotai/kimi-k2")
+
+
+    ;; Prioritize throughput for faster completion
+    (minuet-set-optional-options minuet-openai-compatible-options :provider '(:sort "throughput"))
+    (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 56)
+    (minuet-set-optional-options minuet-openai-compatible-options :top_p 0.9))
 
 (use-package company
   :init (global-company-mode)

@@ -284,6 +284,22 @@ Remove unnecessary UI elements and enable useful modes.
 
 * Development Tools
 
+** Authinfo - API Keys
+
+#+begin_src emacs-lisp
+(defun my/authinfo-openrouter-api-key ()
+  (require 'auth-source)
+  (let ((match (car (auth-source-search
+                     :host "openrouter.ai"
+                     :user "apikey"
+                     :require '(:secret)))))
+    (when match
+      (let ((secret (plist-get match :secret)))
+        (if (functionp secret)
+            (funcall secret)
+          secret)))))
+#+end_src
+
 ** GPTel - LLM Integration
 
 #+begin_src emacs-lisp
@@ -316,6 +332,28 @@ Remove unnecessary UI elements and enable useful modes.
   :vc ( :url "https://github.com/karthink/gptel-agent"
         :rev :newest)
   :config (gptel-agent-update))
+#+end_src
+
+** Minuet - Code Completion
+
+#+begin_src emacs-lisp
+  (use-package minuet
+      :config
+      (setq minuet-provider 'openai-compatible)
+      (setq minuet-request-timeout 2.5)
+      (setq minuet-auto-suggestion-throttle-delay 1.5)
+      (setq minuet-auto-suggestion-debounce-delay 0.6)
+
+      (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
+        (plist-put minuet-openai-compatible-options
+             :api-key #'my/authinfo-openrouter-api-key)
+      (plist-put minuet-openai-compatible-options :model "moonshotai/kimi-k2")
+
+
+      ;; Prioritize throughput for faster completion
+      (minuet-set-optional-options minuet-openai-compatible-options :provider '(:sort "throughput"))
+      (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 56)
+      (minuet-set-optional-options minuet-openai-compatible-options :top_p 0.9))
 #+end_src
 
 ** Company - Auto-completion
