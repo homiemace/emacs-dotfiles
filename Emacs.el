@@ -5,8 +5,10 @@
 (defvar efs/default-font-size 170)
 (defvar efs/default-variable-font-size 170)
 
-;; Garbage collection threshold
-(setq gc-cons-threshold (* 50 1000 1000))
+(add-hook 'emacs-startup-hook
+(lambda ()
+  (setq gc-cons-threshold 100000000
+        gc-cons-percentage 0.1)))
 
 ;; Display startup time
 (defun efs/display-startup-time ()
