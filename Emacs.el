@@ -228,22 +228,23 @@
   :config (gptel-agent-update))
 
 (use-package minuet
-    :config
-    (setq minuet-provider 'openai-compatible)
-    (setq minuet-request-timeout 2.5)
-    (setq minuet-auto-suggestion-throttle-delay 1.5)
-    (setq minuet-auto-suggestion-debounce-delay 0.6)
+  :ensure t
+  :config
+  (setq minuet-provider 'openai-fim-compatible)
+  (setq minuet-n-completions 1)
+  (setq minuet-context-window 512)
 
-    (plist-put minuet-openai-compatible-options :end-point "https://openrouter.ai/api/v1/chat/completions")
-      (plist-put minuet-openai-compatible-options
-           :api-key #'my/authinfo-openrouter-api-key)
-    (plist-put minuet-openai-compatible-options :model "moonshotai/kimi-k2")
+  (plist-put minuet-openai-fim-compatible-options
+             :end-point "http://localhost:11434/v1/completions")
+  (plist-put minuet-openai-fim-compatible-options :name "Ollama")
+  (plist-put minuet-openai-fim-compatible-options
+             :api-key "TERM")
+  (plist-put minuet-openai-fim-compatible-options
+             :model "qwen2.5-coder:3b")
 
-
-    ;; Prioritize throughput for faster completion
-    (minuet-set-optional-options minuet-openai-compatible-options :provider '(:sort "throughput"))
-    (minuet-set-optional-options minuet-openai-compatible-options :max_tokens 56)
-    (minuet-set-optional-options minuet-openai-compatible-options :top_p 0.9))
+  (minuet-set-optional-options
+   minuet-openai-fim-compatible-options
+   :max_tokens 56))
 
 (use-package company
   :init (global-company-mode)
