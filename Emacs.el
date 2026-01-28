@@ -243,6 +243,14 @@
   (setq company-minimum-prefix-length 2
         company-idle-delay 0.3))
 
+(use-package format-all
+:commands (format-all-mode format-all-region-or-buffer)
+:hook ((prog-mode . format-all-mode)
+       (format-all-mode . format-all-ensure-formatter))
+:bind (("C-c =" . format-all-region-or-buffer))
+:custom
+(format-all-show-errors 'errors))
+
 (use-package magit
   :ensure t)
 

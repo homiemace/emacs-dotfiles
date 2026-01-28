@@ -360,6 +360,16 @@ Remove unnecessary UI elements and enable useful modes.
         company-idle-delay 0.3))
 #+end_src
 
+#+begin_src emacs-lisp
+  (use-package format-all
+  :commands (format-all-mode format-all-region-or-buffer)
+  :hook ((prog-mode . format-all-mode)
+         (format-all-mode . format-all-ensure-formatter))
+  :bind (("C-c =" . format-all-region-or-buffer))
+  :custom
+  (format-all-show-errors 'errors))
+#+end_src
+
 ** Magit - Git Interface
 
 #+begin_src emacs-lisp
