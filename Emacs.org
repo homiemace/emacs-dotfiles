@@ -121,11 +121,9 @@ Enable languages for code block execution in Org mode.
 Automatically tangle this configuration file when saved.
 
 #+begin_src emacs-lisp
-;; Automatically tangle our Emacs.org file when we save it
 (defun efs/org-babel-tangle-config ()
   (when (string-equal (file-name-nondirectory (buffer-file-name))
                       "Emacs.org")
-    ;; Dynamic scoping to the rescue
     (let ((org-confirm-babel-evaluate nil))
       (org-babel-tangle))))
 
@@ -569,7 +567,7 @@ npm install -g @tailwindcss/language-server
 
 ** Org Mode Setup Functions
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (defun efs/org-mode-setup ()
   (org-indent-mode)
   (variable-pitch-mode 1)
@@ -627,7 +625,7 @@ npm install -g @tailwindcss/language-server
 
   (require 'org-habit)
   (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-graph-column 60)
+  (setq org-habit-graph-column 60))
 #+end_src
 
 ** Org TODO Keywords
@@ -750,16 +748,18 @@ npm install -g @tailwindcss/language-server
 ** Org Font Configuration
 
 #+begin_src emacs-lisp
-  ;; Call font setup
+(with-eval-after-load 'org
   (efs/org-font-setup)
-  
+
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil :foreground 'unspecified :inherit 'fixed-pitch)
   (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
   (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
   (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil
+                      :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil
+                      :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 #+end_src
 
