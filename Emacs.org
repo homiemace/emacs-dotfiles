@@ -473,6 +473,27 @@ npm install -g @tailwindcss/language-server
 
 #+end_src
 
+*** Python
+
+#+begin_src emacs-lisp
+  
+  (use-package lsp-pyright
+  :ensure t
+  :custom (lsp-pyright-langserver-command "pyright")
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))
+
+#+end_src
+
+Install language server on machine
+
+#+begin_src
+
+pipx install pyright
+  
+#+end_src
+
 ** Projectile - Project Management
 
 #+begin_src emacs-lisp

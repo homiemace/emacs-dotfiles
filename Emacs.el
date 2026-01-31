@@ -266,17 +266,12 @@
   :config
   (lsp-enable-which-key-integration t))
 
-(defun efs/lsp-mode-setup ()
-  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode))
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  (lsp-ui-doc-position 'bottom))
 
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :hook (lsp-mode . efs/lsp-mode-setup)
-  :init
-  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-  :config
-  (lsp-enable-which-key-integration t))
+(use-package lsp-ivy)
 
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)
@@ -285,10 +280,31 @@
   :config
   (setq typescript-indent-level 2))
 
+(use-package svelte-mode
+  :mode "\\.svelte\\'"
+  :hook (svelte-mode . lsp-deferred))
+
+(use-package lsp-tailwindcss
+  :init
+  (setq lsp-tailwindcss-add-on-mode t))
+
+(use-package lsp-pyright
+:ensure t
+:custom (lsp-pyright-langserver-command "pyright")
+:hook (python-mode . (lambda ()
+                        (require 'lsp-pyright)
+                        (lsp))))
+
 (use-package projectile
   :init (projectile-mode +1)
   :bind (:map projectile-mode-map
               ("C-c p" . projectile-command-map)))
+
+(use-package which-key
+  :diminish which-key-mode
+  :init (which-key-mode)
+  :config
+  (setq which-key-idle-delay 0.3))
 
 (use-package ivy
   :diminish
@@ -314,6 +330,40 @@
   :after ivy
   :init
   (ivy-rich-mode 1))
+
+(use-package counsel
+  :diminish
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-switch-buffer)
+         ("C-x C-f" . counsel-find-file)
+         :map minibuffer-local-map
+         ("C-r" . counsel-minibuffer-history))
+  :custom
+  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  :config
+  (counsel-mode 1))
+
+(use-package ivy-prescient
+  :after counsel
+  :custom
+  (ivy-prescient-enable-filtering nil)
+  :config
+  ;; Uncomment the following line to have sorting remembered across sessions!
+  ;(prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
+
+(use-package helpful
+  :commands (helpful-callable helpful-variable helpful-command helpful-key)
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key)
+  :config
+  (setq helpful-max-buffers 5))
 
 (defun efs/org-mode-setup ()
   (org-indent-mode)
@@ -400,3 +450,11 @@
   :hook (org-mode . org-bullets-mode)
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+(defun efs/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook (org-mode . efs/org-mode-visual-fill))
