@@ -458,3 +458,48 @@
 
 (use-package visual-fill-column
   :hook (org-mode . efs/org-mode-visual-fill))
+
+(use-package org-roam
+:ensure t
+:custom
+(org-roam-directory (file-truename "/path/to/org-files/"))
+:bind (("C-c n l" . org-roam-buffer-toggle)
+       ("C-c n f" . org-roam-node-find)
+       ("C-c n g" . org-roam-graph)
+       ("C-c n i" . org-roam-node-insert)
+       ("C-c n c" . org-roam-capture)
+       ;; Dailies
+       ("C-c n j" . org-roam-dailies-capture-today))
+:config
+;; If you're using a vertical completion framework, you might want a more informative completion interface
+(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+(org-roam-db-autosync-mode)
+;; If using org-roam-protocol
+(require 'org-roam-protocol))
+
+(setq forge-dashboard-file "~/.emacs.d/forge/forge-dashboard.org")
+(setq forge-journal-file "~/.emacs.d/forge/forge-journal.org")
+
+(defun forge/open-dashboard ()
+  "Open Forge dashboard file"
+  (interactive)
+  (find-file forge-dashboard-file))
+
+(defun forge/open-journal ()
+  "Open Forge journal file"
+  (interactive)
+  (find-file forge-journal-file))
+
+(defun forge/caveman-q ()
+  "Insert Caveman Q template in journal"
+  (interactive)
+  (find-file forge-journal-file)
+  (goto-char (point-max))
+  (insert (format "\n* Caveman Q (%s)\n- What am I stuck on?\n- What do I know?\n- What's one small action I can take?\n"
+                  (format-time-string "%H:%M")))
+  (recenter))
+
+;; Forge keybindings
+(global-set-key (kbd "C-c f d") 'forge/open-dashboard)
+(global-set-key (kbd "C-c f j") 'forge/open-journal)
+(global-set-key (kbd "C-c f c") 'forge/caveman-q)

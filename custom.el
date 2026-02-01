@@ -10,7 +10,7 @@
 			 gptel-agent helpful ivy-prescient ivy-rich
 			 lsp-ivy lsp-pyright lsp-tailwindcss lsp-ui
 			 magit minuet no-littering org-bullets
-			 page-break-lines projectile
+			 org-roam page-break-lines projectile
 			 rainbow-delimiters svelte-mode
 			 typescript-mode visual-fill-column)))
 (custom-set-faces
