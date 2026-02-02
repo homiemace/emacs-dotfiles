@@ -572,9 +572,16 @@ pipx install pyright
   :custom
   (ivy-prescient-enable-filtering nil)
   :config
-  ;; Uncomment the following line to have sorting remembered across sessions!
+  ;; Uncomment the following line to have sorting remembered across sessions
   ;(prescient-persist-mode 1)
   (ivy-prescient-mode 1))
+#+end_src
+
+*** Search Keybindings
+
+#+begin_src emacs-lisp
+;; Project-wide search with ripgrep
+(global-set-key (kbd "C-c s") 'counsel-rg)
 #+end_src
 
 ** Helpful - Better Help Buffers

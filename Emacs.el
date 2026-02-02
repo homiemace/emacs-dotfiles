@@ -348,9 +348,12 @@
   :custom
   (ivy-prescient-enable-filtering nil)
   :config
-  ;; Uncomment the following line to have sorting remembered across sessions!
+  ;; Uncomment the following line to have sorting remembered across sessions
   ;(prescient-persist-mode 1)
   (ivy-prescient-mode 1))
+
+;; Project-wide search with ripgrep
+(global-set-key (kbd "C-c s") 'counsel-rg)
 
 (use-package helpful
   :commands (helpful-callable helpful-variable helpful-command helpful-key)
@@ -431,6 +434,92 @@
 ;; Save Org buffers after refiling!
 (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
+(setq org-tag-alist
+  '((:startgroup)
+     ; Put mutually exclusive tags here
+     (:endgroup)
+     ("@errand" . ?E)
+     ("@home" . ?H)
+     ("@work" . ?W)
+     ("agenda" . ?a)
+     ("planning" . ?p)
+     ("publish" . ?P)
+     ("batch" . ?b)
+     ("note" . ?n)
+     ("idea" . ?i)))
+
+(setq org-agenda-custom-commands
+ '(("d" "Dashboard"
+   ((agenda "" ((org-deadline-warning-days 7)))
+    (todo "NEXT"
+      ((org-agenda-overriding-header "Next Tasks")))
+    (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+  ("n" "Next Tasks"
+   ((todo "NEXT"
+      ((org-agenda-overriding-header "Next Tasks")))))
+
+  ("W" "Work Tasks" tags-todo "+work-email")
+
+  ;; Low-effort next actions
+  ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+   ((org-agenda-overriding-header "Low Effort Tasks")
+    (org-agenda-max-todos 20)
+    (org-agenda-files org-agenda-files)))
+
+  ("w" "Workflow Status"
+   ((todo "WAIT"
+          ((org-agenda-overriding-header "Waiting on External")
+           (org-agenda-files org-agenda-files)))
+    (todo "REVIEW"
+          ((org-agenda-overriding-header "In Review")
+           (org-agenda-files org-agenda-files)))
+    (todo "PLAN"
+          ((org-agenda-overriding-header "In Planning")
+           (org-agenda-todo-list-sublevels nil)
+           (org-agenda-files org-agenda-files)))
+    (todo "BACKLOG"
+          ((org-agenda-overriding-header "Project Backlog")
+           (org-agenda-todo-list-sublevels nil)
+           (org-agenda-files org-agenda-files)))
+    (todo "READY"
+          ((org-agenda-overriding-header "Ready for Work")
+           (org-agenda-files org-agenda-files)))
+    (todo "ACTIVE"
+          ((org-agenda-overriding-header "Active Projects")
+           (org-agenda-files org-agenda-files)))
+    (todo "COMPLETED"
+          ((org-agenda-overriding-header "Completed Projects")
+           (org-agenda-files org-agenda-files)))
+    (todo "CANC"
+          ((org-agenda-overriding-header "Cancelled Projects")
+           (org-agenda-files org-agenda-files)))))))
+
+(setq org-capture-templates
+  `(("t" "Tasks / Projects")
+    ("tt" "Task" entry (file+olp "~/emacs-dotfiles/org/Tasks.org" "Inbox")
+         "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+
+    ("j" "Journal Entries")
+    ("jj" "Journal" entry
+         (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+         :clock-in :clock-resume
+         :empty-lines 1)
+    ("jm" "Meeting" entry
+         (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+         "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+         :clock-in :clock-resume
+         :empty-lines 1)
+
+    ("w" "Workflows")
+    ("we" "Checking Email" entry (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+         "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+
+    ("m" "Metrics Capture")
+    ("mw" "Weight" table-line (file+headline "~/emacs-dotfiles/org/Metrics.org" "Weight")
+     "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+
 (with-eval-after-load 'org
   (efs/org-font-setup)
 
@@ -503,3 +592,69 @@
 (global-set-key (kbd "C-c f d") 'forge/open-dashboard)
 (global-set-key (kbd "C-c f j") 'forge/open-journal)
 (global-set-key (kbd "C-c f c") 'forge/caveman-q)
+
+;; JavaScript Wiki directory
+(setq my/js-wiki-dir (expand-file-name "wiki/javascript" user-emacs-directory))
+
+(defun my/open-js-wiki ()
+  "Open JavaScript wiki index"
+  (interactive)
+  (find-file (expand-file-name "index.org" my/js-wiki-dir)))
+
+(defun my/js-wiki-search ()
+  "Search JavaScript wiki files using grep"
+  (interactive)
+  (let ((default-directory my/js-wiki-dir))
+    (counsel-rg "")))
+
+(defun my/js-wiki-new-entry ()
+  "Create new wiki entry"
+  (interactive)
+  (let ((title (read-string "Entry title: ")))
+    (find-file (expand-file-name 
+                (concat (downcase (replace-regexp-in-string " " "-" title)) ".org")
+                my/js-wiki-dir))
+    (insert (format "#+TITLE: %s\n#+FILETAGS: :javascript:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src javascript\n\n#+end_src\n" title))
+    (goto-char (point-min))
+    (forward-line 4)))
+
+;; Keybindings
+(global-set-key (kbd "C-c w j") 'my/open-js-wiki)
+(global-set-key (kbd "C-c w s") 'my/js-wiki-search)
+(global-set-key (kbd "C-c w n") 'my/js-wiki-new-entry)
+
+(defun open-init-file ()
+  "Open Emacs.org for editing"
+  (interactive)
+  (find-file "~/.emacs.d/Emacs.org"))
+
+(defun reload-init-file ()
+  "Reload init.el"
+  (interactive)
+  (load-file user-init-file)
+  (message "Config reloaded!"))
+
+(global-set-key (kbd "C-c i") 'open-init-file)
+(global-set-key (kbd "C-c r") 'reload-init-file)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+(add-hook 'after-init-hook
+          (lambda ()
+            (run-with-timer 0.5 nil 
+                            (lambda ()
+                              (set-face-attribute 'default nil 
+                                                  :font "JetBrains Mono" 
+                                                  :height efs/default-font-size)))))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
