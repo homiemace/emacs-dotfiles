@@ -295,6 +295,16 @@
                         (require 'lsp-pyright)
                         (lsp))))
 
+(use-package go-mode
+  :mode "\\.go\\'"
+  :hook (go-mode . lsp-deferred))
+
+(with-eval-after-load 'lsp-mode
+  ;; Use gopls and enable some common settings
+  (setq lsp-gopls-staticcheck t)
+  (setq lsp-gopls-analyses '((shadow . t)
+                             (unusedparams . t))))
+
 (use-package projectile
   :init (projectile-mode +1)
   :bind (:map projectile-mode-map
