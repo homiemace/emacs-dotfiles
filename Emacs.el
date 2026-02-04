@@ -570,11 +570,13 @@
        ;; Dailies
        ("C-c n j" . org-roam-dailies-capture-today))
 :config
-;; If you're using a vertical completion framework, you might want a more informative completion interface
 (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
 (org-roam-db-autosync-mode)
-;; If using org-roam-protocol
 (require 'org-roam-protocol))
+
+(setq org-clock-sound 
+      (expand-file-name "sounds/cheer.wav" 
+                        (file-name-directory (or load-file-name buffer-file-name))))
 
 (setq forge-dashboard-file "~/.emacs.d/forge/forge-dashboard.org")
 (setq forge-journal-file "~/.emacs.d/forge/forge-journal.org")
