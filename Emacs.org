@@ -416,6 +416,17 @@ Remove unnecessary UI elements and enable useful modes.
 
 #+end_src
 
+*** dap-mode - Debugger
+
+#+begin_src emacs-lisp
+
+(use-package dap-mode
+  :config
+  (require 'dap-node)
+  (dap-node-setup))
+  
+#+end_src
+
 *** TypeScript
 
 #+begin_src emacs-lisp

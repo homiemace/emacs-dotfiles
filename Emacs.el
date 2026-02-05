@@ -273,6 +273,11 @@
 
 (use-package lsp-ivy)
 
+(use-package dap-mode
+  :config
+  (require 'dap-node)
+  (dap-node-setup))
+
 (use-package typescript-mode
   :mode (("\\.ts\\'" . typescript-mode)
 	 ("\\.tsx\\'" . typescript-mode))
