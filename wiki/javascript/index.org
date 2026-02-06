@@ -1,6 +1,6 @@
 #+TITLE: JavaScript Fundamentals Wiki
 #+AUTHOR: HomieMace
-#+DATE: 2025
+#+DATE: 2026
 
 My personal reference for JavaScript concepts learned while building projects.
 
