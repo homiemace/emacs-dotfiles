@@ -925,35 +925,51 @@ Personal reference for JavaScript concepts learned while building projects.
 ** Wiki Configuration
 
 #+begin_src emacs-lisp
-;; JavaScript Wiki directory
-(setq my/js-wiki-dir (expand-file-name "wiki/javascript" user-emacs-directory))
+      ;;  Wiki directory
+      (defvar my/wikis
+        '((javascript :dir "wiki/javascript" :tag "javascript" :lang "javascript" :key "j")
+          (svelte     :dir "wiki/svelte"     :tag "svelte"     :lang "svelte"     :key "s")))
 
-(defun my/open-js-wiki ()
-  "Open JavaScript wiki index"
-  (interactive)
-  (find-file (expand-file-name "index.org" my/js-wiki-dir)))
+      (defun my/wiki--config (name)
+        ;; Get plist config for wiki
+        (cdr (assoc name my/wikis)))
 
-(defun my/js-wiki-search ()
-  "Search JavaScript wiki files using grep"
-  (interactive)
-  (let ((default-directory my/js-wiki-dir))
-    (counsel-rg "")))
+      (defun my/wiki--dir (name)
+        ;; Get expanded direc for wiki
+        (expand-file-name (plist-get (my/wiki--config name) :dir)
+                          user-emacs-directory)
 
-(defun my/js-wiki-new-entry ()
-  "Create new wiki entry"
-  (interactive)
-  (let ((title (read-string "Entry title: ")))
-    (find-file (expand-file-name 
-                (concat (downcase (replace-regexp-in-string " " "-" title)) ".org")
-                my/js-wiki-dir))
-    (insert (format "#+TITLE: %s\n#+FILETAGS: :javascript:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src javascript\n\n#+end_src\n" title))
-    (goto-char (point-min))
-    (forward-line 4)))
+        (defun my/wiki-select ()
+          (intern (completing-read "Wiki: " (mapcar #'car my/wikis) nil t))))
 
-;; Keybindings
-(global-set-key (kbd "C-c w j") 'my/open-js-wiki)
-(global-set-key (kbd "C-c w s") 'my/js-wiki-search)
-(global-set-key (kbd "C-c w n") 'my/js-wiki-new-entry)
+  (defun my/wiki-open (name)
+    "Open index.org in wiki NAME.
+  With no argument, prompts for wiki."
+    (interactive (list (my/wiki-select)))
+    (let ((dir (my/wiki--dir name)))
+      (unless (file-directory-p dir) (make-directory dir t))
+      (find-file (expand-file-name "index.org" dir))))
+
+      (defun my/wiki-new-entry (name)
+        "Create new entry in wiki"
+        (interactive (list (my/wiki-select)))
+        (let* ((config (my/wiki--config name))
+      	 (dir (my/wiki--dir name))
+      	 (tag (plist-get config :tag))
+      	 (lang (plist-get config :lang))
+      	 (title (read-string "Entry title: "))
+      	 (slug (downcase (replace-regexp-in-string "[^a-z0-9]+" "-" title)))
+      	 (filepath (expand-file-name (concat slug ".org") dir)))
+          (unless (file-directory-p dir) (make-directory dir t))
+          (find-file filepath)
+          (insert (format "#+TITLE: %s\n#+FILETAGS: :%s:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src %s\n\n#+end_src\n" title tag lang))
+          (goto-char (point-min))
+          (forward-line 4)))
+    
+    ;; Keybindings
+    (global-set-key (kbd "C-c w n") 'my/wiki-new-entry)
+    (global-set-key (kbd "C-c w j") (lambda () (interactive) (my/wiki-open 'javascript)))
+    (global-set-key (kbd "C-c w v") (lambda () (interactive) (my/wiki-open 'svelte)))
 #+end_src
 
 ** Wiki Keybindings
