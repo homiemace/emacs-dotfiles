@@ -1,6 +1,6 @@
 ;;; init.el --- Homie's Emacs Configuration -*- lexical-binding: t -*-
 
-;; (setq debug-on-error t)
+(setq debug-on-error t)
 
 (defvar efs/default-font-size 170)
 (defvar efs/default-variable-font-size 170)
@@ -610,51 +610,47 @@
 (global-set-key (kbd "C-c f j") 'forge/open-journal)
 (global-set-key (kbd "C-c f c") 'forge/caveman-q)
 
-;;  Wiki directory
-    (defvar my/wikis
-      '((javascript :dir "wiki/javascript" :tag "javascript" :lang "javascript" :key "j")
-        (svelte     :dir "wiki/svelte"     :tag "svelte"     :lang "svelte"     :key "s")))
+(defvar my/wikis
+        '((javascript :dir "wiki/javascript" :tag "javascript" :lang "javascript" :key "j")
+          (svelte     :dir "wiki/svelte"     :tag "svelte"     :lang "svelte"     :key "s")))
 
-    (defun my/wiki--config (name)
-      ;; Get plist config for wiki
-      (cdr (assoc name my/wikis)))
+      (defun my/wiki--config (name)
+        (cdr (assoc name my/wikis)))
 
-    (defun my/wiki--dir (name)
-      ;; Get expanded direc for wiki
-      (expand-file-name (plist-get (my/wiki--config name) :dir)
-                        user-emacs-directory)
+      (defun my/wiki--dir (name)
+        (expand-file-name (plist-get (my/wiki--config name) :dir)
+                          user-emacs-directory))
 
-      (defun my/wiki-select ()
-        (intern (completing-read "Wiki: " (mapcar #'car my/wikis) nil t))))
+        (defun my/wiki-select ()
+(intern (completing-read "Wiki: " (mapcar #'car my/wikis) nil t)))
 
 (defun my/wiki-open (name)
-  "Open index.org in wiki NAME.
-With no argument, prompts for wiki."
   (interactive (list (my/wiki-select)))
   (let ((dir (my/wiki--dir name)))
     (unless (file-directory-p dir) (make-directory dir t))
     (find-file (expand-file-name "index.org" dir))))
 
-    (defun my/wiki-new-entry (name)
-      "Create new entry in wiki"
-      (interactive (list (my/wiki-select)))
-      (let* ((config (my/wiki--config name))
-    	 (dir (my/wiki--dir name))
-    	 (tag (plist-get config :tag))
-    	 (lang (plist-get config :lang))
-    	 (title (read-string "Entry title: "))
-    	 (slug (downcase (replace-regexp-in-string "[^a-z0-9]+" "-" title)))
-    	 (filepath (expand-file-name (concat slug ".org") dir)))
-        (unless (file-directory-p dir) (make-directory dir t))
-        (find-file filepath)
-        (insert (format "#+TITLE: %s\n#+FILETAGS: :%s:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src %s\n\n#+end_src\n" title tag lang))
-        (goto-char (point-min))
-        (forward-line 4)))
-  
-  ;; Keybindings
-  (global-set-key (kbd "C-c w n") 'my/wiki-new-entry)
-  (global-set-key (kbd "C-c w j") (lambda () (interactive) (my/wiki-open 'javascript)))
-  (global-set-key (kbd "C-c w v") (lambda () (interactive) (my/wiki-open 'svelte)))
+      (defun my/wiki-new-entry (name)
+        (interactive (list (my/wiki-select)))
+        (let* ((config (my/wiki--config name))
+      	 (dir (my/wiki--dir name))
+      	 (tag (plist-get config :tag))
+      	 (lang (plist-get config :lang))
+      	 (title (read-string "Entry title: "))
+      	 (slug (downcase (replace-regexp-in-string "[^a-z0-9]+" "-" title)))
+      	 (filepath (expand-file-name (concat slug ".org") dir)))
+          (unless (file-directory-p dir) (make-directory dir t))
+          (find-file filepath)
+          (insert (format "#+TITLE: %s\n#+FILETAGS: :%s:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src %s\n\n#+end_src\n" title tag lang))
+          (goto-char (point-min))
+          (forward-line 4)))
+    
+    ;; Keybindings
+    (global-set-key (kbd "C-c w o") #'my/wiki-open)
+    (global-set-key (kbd "C-c w n") #'my/wiki-new-entry)
+
+    (global-set-key (kbd "C-c w j") (lambda () (interactive) (my/wiki-open 'javascript)))
+    (global-set-key (kbd "C-c w v") (lambda () (interactive) (my/wiki-open 'svelte)))
 
 (defun open-init-file ()
   "Open Emacs.org for editing"
