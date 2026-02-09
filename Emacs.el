@@ -50,7 +50,6 @@
   :ensure t
   :if (memq system-type '(gnu/linux darwin))  ; only on linux/macos
   :config
-  (setq exec-path-from-shell-arguments nil)
   ;; auto-detect the shell
   (when (eq system-type 'darwin)  ; macOS
     (setq exec-path-from-shell-shell-name "/opt/homebrew/bin/fish"))
@@ -243,16 +242,21 @@
   (setq company-minimum-prefix-length 2
         company-idle-delay 0.3))
 
-(use-package format-all
-:commands (format-all-mode format-all-region-or-buffer)
-:hook ((prog-mode . format-all-mode)
-       (format-all-mode . format-all-ensure-formatter))
-:bind (("C-c =" . format-all-region-or-buffer))
-:custom
-(format-all-show-errors 'errors))
-
 (use-package magit
   :ensure t)
+
+(use-package apheleia
+:ensure t
+:config
+(if (executable-find "prettierd")
+    (setf (alist-get 'prettier apheleia-formatters)
+          '("prettierd" filepath "--stdin-filepath" filepath))
+  (setf (alist-get 'prettier apheleia-formatters)
+        '("prettier" "--stdin-filepath" filepath)))
+
+(add-to-list 'apheleia-mode-alist '(js-mode . prettier))
+(add-to-list 'apheleia-mode-alist '(typescript-mode . prettier))
+(apheleia-global-mode +1))
 
 (defun efs/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
