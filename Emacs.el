@@ -1,6 +1,6 @@
 ;;; init.el --- Homie's Emacs Configuration -*- lexical-binding: t -*-
 
-(setq debug-on-error t)
+;; (setq debug-on-error t)
 
 (defvar efs/default-font-size 170)
 (defvar efs/default-variable-font-size 170)

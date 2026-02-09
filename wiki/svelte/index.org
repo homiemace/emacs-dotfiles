@@ -1,0 +1,56 @@
+#+TITLE: Svelte Wiki
+#+AUTHOR: HomieMace
+
+My personal reference for Svelte 5 concepts learned while building projects.
+
+* Table of Contents
+
+** Reactivity (Runes)
+
+** Templating & Control Flow
+
+** Component Patterns
+
+** Events & Input
+
+** Reactivity Patterns
+
+* Quick Reference
+
+** Runes (Svelte 5)
+- ~$state()~ - Declare reactive variable
+- ~$derived()~ - Compute from other state (cached)
+- ~$effect()~ - Run code when dependencies change (DOM manipulation)
+- ~$props()~ - Receive component props
+- ~$bindable()~ - Mark prop as two-way bindable
+
+** Old vs New Syntax
+- ~on:click~ = ~onclick~ (no colon)
+- ~export let prop~ = ~let { prop } = $props()~
+- ~<slot />~ = ~{@render children()}~
+- ~$: derived~ = ~const derived = $derived(...)~
+
+** DOM References
+- ~bind:this={element}~ - Get DOM node reference
+- ~$effect(() => { element?.focus() })~ - Use ref after mount
+
+* Review Schedule
+
+* Active Recall Practice
+
+1. What's the difference between ~$state~ and ~$derived~?
+2. When should you use ~$effect~ vs ~$derived~?
+3. How do you get a reference to a DOM element in Svelte 5?
+4. Why does ~count++~ work in Svelte but not React?
+5. What's the difference between ~onclick~ and ~on:click~?
+6. When does ~$effect~ run vs when does ~$derived~ update?
+
+* Tags
+
+- ~:svelte:~ for general concepts
+- ~:runes:~ for $state, $derived, $effect, $props
+- ~:reactivity:~ for reactive patterns
+- ~:dom:~ for bind:this, element refs
+- ~:events:~ for pointer, click, custom events
+- ~:templating:~ for {#if}, {#each}, snippets
+- ~:svelte5:~ for new syntax (vs legacy)

@@ -14,7 +14,7 @@
 * Performance & Startup
 
 #+begin_src emacs-lisp
-  (setq debug-on-error t)
+  ;; (setq debug-on-error t)
 
   (defvar efs/default-font-size 170)
   (defvar efs/default-variable-font-size 170)
