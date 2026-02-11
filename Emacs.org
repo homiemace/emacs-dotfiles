@@ -98,6 +98,12 @@ Keep =.emacs.d= clean and organized.
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 #+end_src
 
+* Discord Rich Presence
+#+begin_src emacs-lisp
+(require 'elcord)
+(elcord-mode)
+#+end_src
+
 * Org Babel Configuration
 
 Configure Org Babel for code execution and auto-tangling.
@@ -969,7 +975,7 @@ Personal reference for concepts learned while building projects.
       (global-set-key (kbd "C-c w n") #'my/wiki-new-entry)
   
       (global-set-key (kbd "C-c w j") (lambda () (interactive) (my/wiki-open 'javascript)))
-      (global-set-key (kbd "C-c w v") (lambda () (interactive) (my/wiki-open 'svelte)))
+      (global-set-key (kbd "C-c w s") (lambda () (interactive) (my/wiki-open 'svelte)))
 #+end_src
 
 ** Wiki Keybindings

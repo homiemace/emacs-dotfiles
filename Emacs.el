@@ -61,6 +61,9 @@
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
+(require 'elcord)
+(elcord-mode)
+
 (org-babel-do-load-languages
   'org-babel-load-languages
   '((emacs-lisp . t)
@@ -654,7 +657,7 @@
     (global-set-key (kbd "C-c w n") #'my/wiki-new-entry)
 
     (global-set-key (kbd "C-c w j") (lambda () (interactive) (my/wiki-open 'javascript)))
-    (global-set-key (kbd "C-c w v") (lambda () (interactive) (my/wiki-open 'svelte)))
+    (global-set-key (kbd "C-c w s") (lambda () (interactive) (my/wiki-open 'svelte)))
 
 (defun open-init-file ()
   "Open Emacs.org for editing"
