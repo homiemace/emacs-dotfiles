@@ -131,7 +131,6 @@
           (lambda ()
             (add-hook 'before-save-hook 'check-parens nil t)))
 
-;; Show matching parentheses
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 
@@ -187,18 +186,6 @@
     (setq insert-directory-program gls
           dired-use-ls-dired t
           dired-listing-switches "-alh --group-directories-first")))
-
-(defun my/authinfo-openrouter-api-key ()
-  (require 'auth-source)
-  (let ((match (car (auth-source-search
-                     :host "openrouter.ai"
-                     :user "apikey"
-                     :require '(:secret)))))
-    (when match
-      (let ((secret (plist-get match :secret)))
-        (if (functionp secret)
-            (funcall secret)
-          secret)))))
 
 (use-package gptel
 :ensure t
