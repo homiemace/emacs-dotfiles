@@ -188,18 +188,18 @@
           dired-listing-switches "-alh --group-directories-first")))
 
 (use-package gptel
-:ensure t
-:commands (gptel)
-:init
-(setq gptel-model 'mixtral-8x7b-instruct
-	gptel-use-tools t)
-:config
-(setq gptel-backend
-      (gptel-make-openai "Ollama"
-        :host "localhost:11434"
-        :stream t
-        :models '(mistral:latest)
-        :request-params '(:transforms ["middle-out"]))))
+  :ensure t
+  :commands (gptel)
+  :init
+  (setq gptel-use-tools t)
+  :config
+  (setq
+   gptel-model   'gpt-oss-20b
+   gptel-backend (gptel-make-openai "llama-cpp"
+                   :stream t
+                   :protocol "http"
+                   :host "localhost:8080"
+                   :models '(gpt-oss-20b))))
 
 (use-package gptel-agent
   :vc ( :url "https://github.com/karthink/gptel-agent"

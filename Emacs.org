@@ -290,19 +290,19 @@ Remove unnecessary UI elements and enable useful modes.
 ** GPTel - LLM Integration
 
 #+begin_src emacs-lisp
-    (use-package gptel
-    :ensure t
-    :commands (gptel)
-    :init
-    (setq gptel-model 'mixtral-8x7b-instruct
-  	gptel-use-tools t)
-    :config
-    (setq gptel-backend
-          (gptel-make-openai "Ollama"
-            :host "localhost:11434"
-            :stream t
-            :models '(mistral:latest)
-            :request-params '(:transforms ["middle-out"]))))
+(use-package gptel
+  :ensure t
+  :commands (gptel)
+  :init
+  (setq gptel-use-tools t)
+  :config
+  (setq
+   gptel-model   'gpt-oss-20b
+   gptel-backend (gptel-make-openai "llama-cpp"
+                   :stream t
+                   :protocol "http"
+                   :host "localhost:8080"
+                   :models '(gpt-oss-20b))))
 #+end_src
 
 *** GPTel-Agent - Tools
@@ -353,6 +353,9 @@ Remove unnecessary UI elements and enable useful modes.
 (use-package magit
   :ensure t)
 #+end_src
+
+
+** Apheleia - Code Formatter
 
 #+begin_src emacs-lisp
   (use-package apheleia
@@ -496,7 +499,6 @@ Install language server on machine
 pipx install pyright
   
 #+end_src
-
 
 *** Go
 
