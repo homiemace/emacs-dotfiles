@@ -99,8 +99,10 @@ Keep =.emacs.d= clean and organized.
 
 * Discord Rich Presence
 #+begin_src emacs-lisp
-(require 'elcord)
-(elcord-mode)
+(use-package elcord
+  :ensure t
+  :config
+  (elcord-mode))
 #+end_src
 
 * Org Babel Configuration

@@ -60,8 +60,10 @@
   (setq auto-save-file-name-transforms
         `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
-(require 'elcord)
-(elcord-mode)
+(use-package elcord
+  :ensure t
+  :config
+  (elcord-mode))
 
 (org-babel-do-load-languages
   'org-babel-load-languages
