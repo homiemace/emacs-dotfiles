@@ -5,5 +5,4 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-(require 'org)
-(org-babel-load-file (expand-file-name "Emacs.org" user-emacs-directory))
+(load (expand-file-name "Emacs" user-emacs-directory) nil 'nomessage)

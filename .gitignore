@@ -3,6 +3,8 @@
 \#*\#
 .\#*
 *.elc
+*.eln
+Emacs.el
 auto-save-list
 tramp
 network-security.data
