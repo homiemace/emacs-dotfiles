@@ -5,4 +5,11 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-(load (expand-file-name "Emacs" user-emacs-directory) nil 'nomessage)
+(let ((org-file (expand-file-name "Emacs.org"
+                                  user-emacs-directory))
+      (el-file  (expand-file-name "Emacs.el"
+                                  user-emacs-directory)))
+  (unless (file-exists-p el-file)
+    (require 'org)
+    (org-babel-tangle-file org-file))
+  (load el-file nil 'nomessage))
