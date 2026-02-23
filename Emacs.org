@@ -1022,6 +1022,33 @@ Prevents window resize crashes by delaying font setting.
                                                   :height efs/default-font-size)))))
 #+end_src
 
+* Email - Gnus
+
+#+begin_src emacs-lisp
+(setq auth-sources '("~/.authinfo"))
+
+(setq mml-smime-use nil)
+(setq mml2015-use nil)
+(setq mm-verify-option 'never)
+(setq mm-decrypt-option 'never)
+
+(setq gnus-select-method
+      '(nnimap "protonmail"
+               (nnimap-address "127.0.0.1")
+               (nnimap-server-port 1143)
+               (nnimap-stream network)))
+
+(setq smtpmail-smtp-server "127.0.0.1"
+      smtpmail-smtp-service 1025
+      smtpmail-stream-type 'plain
+      send-mail-function 'smtpmail-send-it
+      message-send-mail-function 'smtpmail-send-it)
+
+(setq gnus-message-replysign nil)
+(setq gnus-message-replyencrypt nil)
+(setq gnus-inhibit-startup-message t)
+#+end_src
+
 * Custom Variables
 
 #+begin_src emacs-lisp
