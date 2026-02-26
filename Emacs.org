@@ -939,7 +939,8 @@ Personal reference for concepts learned while building projects.
 #+begin_src emacs-lisp
         (defvar my/wikis
           '((javascript :dir "wiki/javascript" :tag "javascript" :lang "javascript" :key "j")
-            (svelte     :dir "wiki/svelte"     :tag "svelte"     :lang "svelte"     :key "s")))
+            (svelte     :dir "wiki/svelte"     :tag "svelte"     :lang "svelte"     :key "s")
+  (webapis     :dir "wiki/webapis"    :tag "webapis"    :lang "javascript" :key "w")))
 
         (defun my/wiki--config (name)
           (cdr (assoc name my/wikis)))
@@ -975,9 +976,10 @@ Personal reference for concepts learned while building projects.
       ;; Keybindings
       (global-set-key (kbd "C-c w o") #'my/wiki-open)
       (global-set-key (kbd "C-c w n") #'my/wiki-new-entry)
-  
+
       (global-set-key (kbd "C-c w j") (lambda () (interactive) (my/wiki-open 'javascript)))
       (global-set-key (kbd "C-c w s") (lambda () (interactive) (my/wiki-open 'svelte)))
+  (global-set-key (kbd "C-c w w") (lambda () (interactive) (my/wiki-open 'webapis)))
 #+end_src
 
 ** Wiki Keybindings
@@ -987,7 +989,6 @@ Personal reference for concepts learned while building projects.
 | =C-c w j= | Open wiki index         |
 | =C-c w s= | Search wiki             |
 | =C-c w n= | Create new wiki entry   |
-
 
 * Utility Functions & Keybindings
 
