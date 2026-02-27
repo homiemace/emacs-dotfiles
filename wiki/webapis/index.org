@@ -1,1 +1,14 @@
-** Temp lol
+#+TITLE: Svelte Wiki
+#+AUTHOR: HomieMace
+
+My personal reference for Web API concepts learned while building projects.
+
+* Table of Contents
+
+* Quick Reference
+
+* Review Schedule
+
+* Active Recall Practice
+
+* Tags
