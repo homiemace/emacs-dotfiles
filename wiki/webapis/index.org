@@ -5,6 +5,10 @@ My personal reference for Web API concepts learned while building projects.
 
 * Table of Contents
 
+** DOM
+** Pointer Events
+** Patterns
+
 * Quick Reference
 
 * Review Schedule
