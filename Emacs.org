@@ -14,25 +14,28 @@
 * Performance & Startup
 
 #+begin_src emacs-lisp
-  ;; (setq debug-on-error t)
+;; (setq debug-on-error t)
 
-  (defvar efs/default-font-size 170)
-  (defvar efs/default-variable-font-size 170)
+(defvar efs/default-font-size 170)
+(defvar efs/default-variable-font-size 170)
 
-  (add-hook 'emacs-startup-hook
-  (lambda ()
-    (setq gc-cons-threshold 100000000
-          gc-cons-percentage 0.1)))
+(add-hook
+ 'emacs-startup-hook
+ (lambda ()
+   (setq
+    gc-cons-threshold 100000000
+    gc-cons-percentage 0.1)))
 
-  ;; Display startup time
-  (defun efs/display-startup-time ()
-    (message "Emacs loaded in %s with %d garbage collections."
-             (format "%.2f seconds"
-                     (float-time
-                       (time-subtract after-init-time before-init-time)))
-             gcs-done))
+;; Display startup time
+(defun efs/display-startup-time ()
+  (message
+   "Emacs loaded in %s with %d garbage collections."
+   (format
+    "%.2f seconds"
+    (float-time (time-subtract after-init-time before-init-time)))
+   gcs-done))
 
-  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+(add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
 
 * Package Management
@@ -42,15 +45,16 @@ Set up package archives and use-package.
 #+begin_src emacs-lisp
 (require 'package)
 
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("org" . "https://orgmode.org/elpa/")
+        ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 
 ;; Initialize use-package
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+(unless
+ (package-installed-p 'use-package) (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -73,15 +77,17 @@ Set up package archives and use-package.
 Ensure Emacs inherits PATH from shell (needed for npm, bun, etc.)
 
 #+begin_src emacs-lisp
-  (use-package exec-path-from-shell
-    :ensure t
-    :if (memq system-type '(gnu/linux darwin))  ; only on linux/macos
-    :config
-    ;; auto-detect the shell
-    (when (eq system-type 'darwin)  ; macOS
-      (setq exec-path-from-shell-shell-name "/opt/homebrew/bin/fish"))
-    (setq exec-path-from-shell-arguments '("-l"))
-    (exec-path-from-shell-initialize))
+(use-package
+ exec-path-from-shell
+ :ensure t
+ :if (memq system-type '(gnu/linux darwin)) ; only on linux/macos
+ :config
+ ;; auto-detect the shell
+ (when
+  (eq system-type 'darwin) ; macOS
+  (setq exec-path-from-shell-shell-name "/opt/homebrew/bin/fish"))
+ (setq exec-path-from-shell-arguments '("-l"))
+ (exec-path-from-shell-initialize))
 #+end_src
 
 * No-Littering
@@ -89,20 +95,17 @@ Ensure Emacs inherits PATH from shell (needed for npm, bun, etc.)
 Keep =.emacs.d= clean and organized.
 
 #+begin_src emacs-lisp
-(use-package no-littering
-  :ensure t
-  :config
-  (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
+(use-package
+ no-littering
+ :ensure t
+ :config
+ (setq auto-save-file-name-transforms
+       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 #+end_src
 
 * Discord Rich Presence
 #+begin_src emacs-lisp
-  (use-package elcord
-    :defer 5
-    :ensure t
-    :config
-    (elcord-mode))
+(use-package elcord :defer 5 :ensure t :config (elcord-mode))
 #+end_src
 
 * Org Babel Configuration
@@ -115,12 +118,16 @@ Automatically tangle this configuration file when saved.
 
 #+begin_src emacs-lisp
 (defun efs/org-babel-tangle-config ()
-  (when (string-equal (file-name-nondirectory (buffer-file-name))
-                      "Emacs.org")
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+  (when
+   (string-equal
+    (file-name-nondirectory (buffer-file-name)) "Emacs.org")
+   (let ((org-confirm-babel-evaluate nil))
+     (org-babel-tangle))))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+(add-hook
+ 'org-mode-hook
+ (lambda ()
+   (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 #+end_src
 
 * UI & Appearance
@@ -128,17 +135,22 @@ Automatically tangle this configuration file when saved.
 ** Theme
 
 #+begin_src emacs-lisp
-(use-package catppuccin-theme
-  :ensure t
-  :config
-  (setq catppuccin-flavor 'mocha)
-  (catppuccin-reload))
+(use-package
+ catppuccin-theme
+ :ensure t
+ :config
+ (setq catppuccin-flavor 'mocha)
+ (catppuccin-reload))
 #+end_src
 
 ** Font
 
 #+begin_src emacs-lisp
-(set-face-attribute 'default nil :font "JetBrains Mono" :height efs/default-font-size)
+(set-face-attribute
+ 'default
+ nil
+ :font "JetBrains Mono"
+ :height efs/default-font-size)
 #+end_src
 
 ** UI Cleanup
@@ -155,13 +167,15 @@ Remove unnecessary UI elements and enable useful modes.
 (global-display-line-numbers-mode t)
 
 ;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                shell-mode-hook
-                treemacs-mode-hook
-                eshell-mode-hook
-                dashboard-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+(dolist
+ (mode
+  '(org-mode-hook
+    term-mode-hook
+    shell-mode-hook
+    treemacs-mode-hook
+    eshell-mode-hook
+    dashboard-mode-hook))
+ (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+end_src
 
 ** Icons
@@ -175,37 +189,40 @@ Remove unnecessary UI elements and enable useful modes.
 ** Modeline
 
 #+begin_src emacs-lisp
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-height 15)
-  (setq doom-modeline-bar-width 3)
-  (setq doom-modeline-icon t)
-  (setq mode-line-default-help-echo nil)
-  
-  (set-face-attribute 'mode-line nil :box nil)
-  (set-face-attribute 'mode-line-inactive nil :box nil)
-  (set-face-attribute 'mode-line-highlight nil :box nil))
+(use-package
+ doom-modeline
+ :ensure t
+ :init (doom-modeline-mode 1)
+ :config
+ (setq doom-modeline-height 15)
+ (setq doom-modeline-bar-width 3)
+ (setq doom-modeline-icon t)
+ (setq mode-line-default-help-echo nil)
+
+ (set-face-attribute 'mode-line nil :box nil)
+ (set-face-attribute 'mode-line-inactive nil :box nil)
+ (set-face-attribute 'mode-line-highlight nil :box nil))
 #+end_src
 
 ** Rainbow Delimiters
 
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
+(use-package
+ rainbow-delimiters
+ :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
 ** Page Break Lines & Parentheses
 
 #+begin_src emacs-lisp
-(use-package page-break-lines
-  :ensure t
-  :hook (emacs-lisp-mode . page-break-lines-mode))
+(use-package
+ page-break-lines
+ :ensure t
+ :hook (emacs-lisp-mode . page-break-lines-mode))
 
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook 'check-parens nil t)))
+(add-hook
+ 'emacs-lisp-mode-hook
+ (lambda () (add-hook 'before-save-hook 'check-parens nil t)))
 
 (show-paren-mode 1)
 (setq show-paren-delay 0)
@@ -216,50 +233,53 @@ Remove unnecessary UI elements and enable useful modes.
 #+begin_src emacs-lisp
 (advice-add #'dashboard-replace-displayable :override #'identity)
 
-(use-package dashboard
-  :ensure t
-  :config
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-  (setq dashboard-startup-banner "~/.emacs.d/banners/7.txt")
-  (setq dashboard-banner-logo-title nil)
-  (setq dashboard-items '((projects . 10)
-                          (recents  . 10)))
-  
-  ;; Icons
-  (setq dashboard-display-icons-p t)
-  (setq dashboard-icon-type 'nerd-icons)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-heading-icons
-        '((recents   . "nf-oct-history")
-          (projects  . "nf-oct-rocket")
-          (bookmarks . "nf-oct-bookmark")
-          (agenda    . "nf-oct-calendar")))
+(use-package
+ dashboard
+ :ensure t
+ :config
+ (setq initial-buffer-choice
+       (lambda () (get-buffer-create "*dashboard*")))
+ (setq dashboard-startup-banner "~/.emacs.d/banners/7.txt")
+ (setq dashboard-banner-logo-title nil)
+ (setq dashboard-items '((projects . 10) (recents . 10)))
 
-  (setq dashboard-item-shortcuts '((recents   . "r")
-                                   (bookmarks . "m")
-                                   (projects  . "p")
-                                   (agenda    . "a")
-                                   (registers . "e")))
-  
-  ;; Layout
-  (setq dashboard-center-content t)
-  (setq dashboard-navigation-cycle t)
-  (setq dashboard-vertically-center-content t)
-  (setq dashboard-show-shortcuts nil)
-  (setq dashboard-set-init-info t)
-  (setq inhibit-startup-screen t)
-  
-  (dashboard-setup-startup-hook)
-  
-  ;; Fix dashboard centering on window resize
-  (defun my-dashboard-fullscreen-fix ()
-    "Fix dashboard centering in fullscreen"
-    (when (string= (buffer-name) "*dashboard*")
-      (dashboard-refresh-buffer)))
-  
-  (add-hook 'window-configuration-change-hook 'my-dashboard-fullscreen-fix)
-  (add-hook 'dashboard-mode-hook 'page-break-lines-mode))
+ ;; Icons
+ (setq dashboard-display-icons-p t)
+ (setq dashboard-icon-type 'nerd-icons)
+ (setq dashboard-set-file-icons t)
+ (setq dashboard-set-heading-icons t)
+ (setq dashboard-heading-icons
+       '((recents . "nf-oct-history")
+         (projects . "nf-oct-rocket")
+         (bookmarks . "nf-oct-bookmark")
+         (agenda . "nf-oct-calendar")))
+
+ (setq dashboard-item-shortcuts
+       '((recents . "r")
+         (bookmarks . "m")
+         (projects . "p")
+         (agenda . "a")
+         (registers . "e")))
+
+ ;; Layout
+ (setq dashboard-center-content t)
+ (setq dashboard-navigation-cycle t)
+ (setq dashboard-vertically-center-content t)
+ (setq dashboard-show-shortcuts nil)
+ (setq dashboard-set-init-info t)
+ (setq inhibit-startup-screen t)
+
+ (dashboard-setup-startup-hook)
+
+ ;; Fix dashboard centering on window resize
+ (defun my-dashboard-fullscreen-fix ()
+   "Fix dashboard centering in fullscreen"
+   (when
+    (string= (buffer-name) "*dashboard*") (dashboard-refresh-buffer)))
+
+ (add-hook
+  'window-configuration-change-hook 'my-dashboard-fullscreen-fix)
+ (add-hook 'dashboard-mode-hook 'page-break-lines-mode))
 #+end_src
 
 * System-Specific Configuration
@@ -267,11 +287,13 @@ Remove unnecessary UI elements and enable useful modes.
 ** macOS - GNU ls for Dired
 
 #+begin_src emacs-lisp
-(when (eq system-type 'darwin)
-  (when-let* ((gls (executable-find "gls")))
-    (setq insert-directory-program gls
-          dired-use-ls-dired t
-          dired-listing-switches "-alh --group-directories-first")))
+(when
+ (eq system-type 'darwin)
+ (when-let* ((gls (executable-find "gls")))
+   (setq
+    insert-directory-program gls
+    dired-use-ls-dired t
+    dired-listing-switches "-alh --group-directories-first")))
 #+end_src
 
 * Development Tools
@@ -279,101 +301,121 @@ Remove unnecessary UI elements and enable useful modes.
 ** GPTel - LLM Integration
 
 #+begin_src emacs-lisp
-(use-package gptel
-  :ensure t
-  :commands (gptel)
-  :init
-  (setq gptel-use-tools t)
-  :config
-  (setq
-   gptel-model   'gpt-oss-20b
-   gptel-backend (gptel-make-openai "llama-cpp"
-                   :stream t
-                   :protocol "http"
-                   :host "localhost:8080"
-                   :models '(gpt-oss-20b))))
+(use-package
+ gptel
+ :ensure t
+ :commands (gptel)
+ :init (setq gptel-use-tools t)
+ :config
+ (setq
+  gptel-model 'gpt-oss-20b
+  gptel-backend
+  (gptel-make-openai
+   "llama-cpp"
+   :stream t
+   :protocol "http"
+   :host "localhost:8080"
+   :models '(gpt-oss-20b))))
 #+end_src
 
 *** GPTel-Agent - Tools
 
 #+begin_src emacs-lisp
-(use-package gptel-agent
-  :vc ( :url "https://github.com/karthink/gptel-agent"
-        :rev :newest)
-  :config (gptel-agent-update))
+(use-package
+ gptel-agent
+ :vc
+ (:url "https://github.com/karthink/gptel-agent" :rev :newest)
+ :config (gptel-agent-update))
 #+end_src
 
 ** Minuet - Code Completion
 
 #+begin_src emacs-lisp
-(use-package minuet
-    :config
-    (setq minuet-provider 'openai-fim-compatible)
-    (setq minuet-n-completions 1)
-    (setq minuet-context-window 512)
-    (plist-put minuet-openai-fim-compatible-options :end-point "http://localhost:8012/v1/completions")
-    (plist-put minuet-openai-fim-compatible-options :name "Llama.cpp")
-    (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
-    (plist-put minuet-openai-fim-compatible-options :model "PLACEHOLDER")
-    (minuet-set-nested-plist minuet-openai-fim-compatible-options nil :template :suffix)
-    (minuet-set-optional-options
-     minuet-openai-fim-compatible-options
-     :prompt
-     (defun minuet-llama-cpp-fim-qwen-prompt-function (ctx)
-         (format "<|fim_prefix|>%s\n%s<|fim_suffix|>%s<|fim_middle|>"
-                 (plist-get ctx :language-and-tab)
-                 (plist-get ctx :before-cursor)
-                 (plist-get ctx :after-cursor)))
-     :template)
+(use-package
+ minuet
+ :config
+ (setq minuet-provider 'openai-fim-compatible)
+ (setq minuet-n-completions 1)
+ (setq minuet-context-window 512)
+ (plist-put
+  minuet-openai-fim-compatible-options
+  :end-point "http://localhost:8012/v1/completions")
+ (plist-put minuet-openai-fim-compatible-options :name "Llama.cpp")
+ (plist-put minuet-openai-fim-compatible-options :api-key "TERM")
+ (plist-put minuet-openai-fim-compatible-options :model "PLACEHOLDER")
+ (minuet-set-nested-plist
+  minuet-openai-fim-compatible-options nil
+  :template
+  :suffix)
+ (minuet-set-optional-options
+  minuet-openai-fim-compatible-options
+  :prompt
+  (defun minuet-llama-cpp-fim-qwen-prompt-function (ctx)
+    (format
+     "<|fim_prefix|>%s\n%s<|fim_suffix|>%s<|fim_middle|>"
+     (plist-get ctx :language-and-tab)
+     (plist-get ctx :before-cursor)
+     (plist-get ctx :after-cursor)))
+  :template)
 
-    (minuet-set-optional-options minuet-openai-fim-compatible-options :max_tokens 56))
+ (minuet-set-optional-options
+  minuet-openai-fim-compatible-options
+  :max_tokens 56))
 #+end_src
 
 ** Company - Auto-completion
 
 #+begin_src emacs-lisp
-(use-package company
-  :init (global-company-mode)
-  :config
-  (setq company-minimum-prefix-length 2
-        company-idle-delay 0.3))
+(use-package
+ company
+ :init (global-company-mode)
+ :config
+ (setq
+  company-minimum-prefix-length 2
+  company-idle-delay 0.3))
 #+end_src
 
 ** Magit - Git Interface
 
 #+begin_src emacs-lisp
-(use-package magit
-  :ensure t)
+(use-package magit :ensure t)
 #+end_src
 
 ** Apheleia - Code Formatter
 
 #+begin_src emacs-lisp
-  (use-package apheleia
-  :ensure t
-  :config
-  (if (executable-find "prettierd")
-      (setf (alist-get 'prettier apheleia-formatters)
-            '("prettierd" filepath "--stdin-filepath" filepath))
-    (setf (alist-get 'prettier apheleia-formatters)
-          '("prettier" "--stdin-filepath" filepath)))
-  
-  (add-to-list 'apheleia-mode-alist '(js-mode . prettier))
-  (add-to-list 'apheleia-mode-alist '(typescript-mode . prettier))
-  (apheleia-global-mode +1))
+(use-package
+ apheleia
+ :ensure t
+ :config
+ (if (executable-find "prettierd")
+     (setf (alist-get 'prettier apheleia-formatters)
+           '("prettierd" filepath "--stdin-filepath" filepath))
+   (setf (alist-get 'prettier apheleia-formatters)
+         '("prettier" "--stdin-filepath" filepath)))
+
+ (add-to-list 'apheleia-mode-alist '(js-mode . prettier))
+ (add-to-list 'apheleia-mode-alist '(typescript-mode . prettier))
+ (apheleia-global-mode +1))
 #+end_src
 
 ** Elisp Formatter
 
 #+begin_src emacs-lisp
-(use-package elisp-autofmt
-  :ensure t
-  :hook (emacs-lisp-mode . elisp-autofmt-mode)
-  :custom
-  (elisp-autofmt-on-save-p t)
-  (elisp-autofmt-max-line-length 80)
-  :bind (:map emacs-lisp-mode-map
-         ("C-c f" . elisp-autofmt-buffer)))
+(use-package
+ elisp-autofmt
+ :ensure t
+ :hook (emacs-lisp-mode . elisp-autofmt-mode)
+ :custom
+ (elisp-autofmt-on-save-p t)
+ (elisp-autofmt-max-line-length 80)
+ :config
+ (when
+  (eq system-type 'windows-nt)
+  (setq elisp-autofmt-use-function-defs nil)
+  (setq elisp-autofmt-parallel-jobs -1))
+ :bind
+ (:map emacs-lisp-mode-map ("C-c f" . elisp-autofmt-buffer)))
 #+end_src
 
 Install formatter on machine
@@ -389,166 +431,144 @@ pipx install elisp-autofmt
 **** lsp-mode
 
 #+begin_src emacs-lisp
-  (defun efs/lsp-mode-setup ()
-    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-    (lsp-headerline-breadcrumb-mode))
+(defun efs/lsp-mode-setup ()
+  (setq lsp-headerline-breadcrumb-segments
+        '(path-up-to-project file symbols))
+  (lsp-headerline-breadcrumb-mode))
 
-  (use-package lsp-mode
-    :commands (lsp lsp-deferred)
-    :hook (lsp-mode . efs/lsp-mode-setup)
-    :init
-    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
-    :config
-    (lsp-enable-which-key-integration t))
+(use-package
+ lsp-mode
+ :commands (lsp lsp-deferred)
+ :hook (lsp-mode . efs/lsp-mode-setup)
+ :init
+ (setq lsp-keymap-prefix "C-c l") ;; Or 'C-l', 's-l'
+ :config (lsp-enable-which-key-integration t))
 #+end_src
 
 **** lsp-ui
 
 #+begin_src emacs-lisp
-
-  (use-package lsp-ui
-    :hook (lsp-mode . lsp-ui-mode)
-    :custom
-    (lsp-ui-doc-position 'bottom))
-
+(use-package
+ lsp-ui
+ :hook (lsp-mode . lsp-ui-mode)
+ :custom (lsp-ui-doc-position 'bottom))
 #+end_src
 
 **** lsp-ivy
 
 #+begin_src emacs-lisp
-
-  (use-package lsp-ivy)
-
+(use-package lsp-ivy)
 #+end_src
 
 *** dap-mode - Debugger
 
 #+begin_src emacs-lisp
-
-(use-package dap-mode
-  :config
-  (require 'dap-node)
-  (dap-node-setup))
-  
+(use-package dap-mode :config (require 'dap-node) (dap-node-setup))
 #+end_src
 
 *** TypeScript
 
 #+begin_src emacs-lisp
-
-  (use-package typescript-mode
-    :mode (("\\.ts\\'" . typescript-mode)
-  	 ("\\.tsx\\'" . typescript-mode))
-    :hook (typescript-mode . lsp-deferred)
-    :config
-    (setq typescript-indent-level 2))
-
+(use-package
+ typescript-mode
+ :mode
+ (("\\.ts\\'" . typescript-mode) ("\\.tsx\\'" . typescript-mode))
+ :hook (typescript-mode . lsp-deferred)
+ :config (setq typescript-indent-level 2))
 #+end_src
 
 Install language server on machine
 
 #+begin_src shell :tangle no
-
 npm install -g typescript-language-server typescript
-
 #+end_src
 
 *** Svelte
 
 #+begin_src emacs-lisp
-
-  (use-package svelte-mode
-    :mode "\\.svelte\\'"
-    :hook (svelte-mode . lsp-deferred))
-
+(use-package
+ svelte-mode
+ :mode "\\.svelte\\'"
+ :hook (svelte-mode . lsp-deferred))
 #+end_src
 
 Install language server on machine
 
 #+begin_src shell :tangle no
-
 npm install -g svelte-language-server svelte
-  
 #+end_src
 
 *** Tailwind CSS
 
 #+begin_src emacs-lisp
-
-  (use-package lsp-tailwindcss
-    :init
-    (setq lsp-tailwindcss-add-on-mode t))
-
+(use-package
+ lsp-tailwindcss
+ :init (setq lsp-tailwindcss-add-on-mode t))
 #+end_src
 
 Install language server on machine
 
 #+begin_src shell :tangle no
-
 npm install -g @tailwindcss/language-server
-
 #+end_src
 
 *** Python
 
 #+begin_src emacs-lisp
-  
-  (use-package lsp-pyright
-  :ensure t
-  :custom (lsp-pyright-langserver-command "pyright")
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp))))
-
+(use-package
+ lsp-pyright
+ :ensure t
+ :custom (lsp-pyright-langserver-command "pyright")
+ :hook
+ (python-mode
+  .
+  (lambda ()
+    (require 'lsp-pyright)
+    (lsp))))
 #+end_src
 
 Install language server on machine
 
 #+begin_src shell :tangle no
-
-pipx install pyright
-  
+pipx install pyright  
 #+end_src
 
 *** Go
 
 #+begin_src emacs-lisp
-(use-package go-mode
-  :mode "\\.go\\'"
-  :hook (go-mode . lsp-deferred))
+(use-package go-mode :mode "\\.go\\'" :hook (go-mode . lsp-deferred))
 
-(with-eval-after-load 'lsp-mode
-  ;; Use gopls and enable some common settings
-  (setq lsp-gopls-staticcheck t)
-  (setq lsp-gopls-analyses '((shadow . t)
-                             (unusedparams . t))))
+(with-eval-after-load
+ 'lsp-mode
+ ;; Use gopls and enable some common settings
+ (setq lsp-gopls-staticcheck t)
+ (setq lsp-gopls-analyses '((shadow . t) (unusedparams . t))))
 #+end_src
 
 Install language server on machine
 
 #+begin_src shell :tangle no
-
 go install golang.org/x/tools/gopls@latest
-
 #+end_src
 
 ** Projectile - Project Management
 
 #+begin_src emacs-lisp
-(use-package projectile
-  :init (projectile-mode +1)
-  :bind (:map projectile-mode-map
-              ("C-c p" . projectile-command-map)))
+(use-package
+ projectile
+ :init (projectile-mode +1)
+ :bind
+ (:map projectile-mode-map ("C-c p" . projectile-command-map)))
 #+end_src
 
 ** Which-Key
 
 #+begin_src emacs-lisp
-(use-package which-key
-  :diminish which-key-mode
-  :init (which-key-mode)
-  :config
-  (setq which-key-idle-delay 0.3))
+(use-package
+ which-key
+ :diminish which-key-mode
+ :init (which-key-mode)
+ :config (setq which-key-idle-delay 0.3))
 #+end_src
 
 ** Ivy, Counsel & Swiper
@@ -556,63 +576,65 @@ go install golang.org/x/tools/gopls@latest
 *** Ivy
 
 #+begin_src emacs-lisp
-(use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :custom
-  (ivy-ignore-buffers '("\\` " "\\*Ibuffer\\*"))
-  :config
-  (ivy-mode 1))
+(use-package
+ ivy
+ :diminish
+ :bind
+ (("C-s" . swiper)
+  :map
+  ivy-minibuffer-map
+  ("TAB" . ivy-alt-done)
+  ("C-l" . ivy-alt-done)
+  ("C-j" . ivy-next-line)
+  ("C-k" . ivy-previous-line)
+  :map
+  ivy-switch-buffer-map
+  ("C-k" . ivy-previous-line)
+  ("C-l" . ivy-done)
+  ("C-d" . ivy-switch-buffer-kill)
+  :map
+  ivy-reverse-i-search-map
+  ("C-k" . ivy-previous-line)
+  ("C-d" . ivy-reverse-i-search-kill))
+ :custom (ivy-ignore-buffers '("\\` " "\\*Ibuffer\\*"))
+ :config (ivy-mode 1))
 #+end_src
 
 *** Ivy Rich
 
 #+begin_src emacs-lisp
-(use-package ivy-rich
-  :after ivy
-  :init
-  (ivy-rich-mode 1))
+(use-package ivy-rich :after ivy :init (ivy-rich-mode 1))
 #+end_src
 
 *** Counsel
 
 #+begin_src emacs-lisp
-(use-package counsel
-  :diminish
-  :bind (("M-x" . counsel-M-x)
-         ("C-x b" . counsel-switch-buffer)
-         ("C-x C-f" . counsel-find-file)
-         :map minibuffer-local-map
-         ("C-r" . counsel-minibuffer-history))
-  :custom
-  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-  :config
-  (counsel-mode 1))
+(use-package
+ counsel
+ :diminish
+ :bind
+ (("M-x" . counsel-M-x)
+  ("C-x b" . counsel-switch-buffer)
+  ("C-x C-f" . counsel-find-file)
+  :map
+  minibuffer-local-map
+  ("C-r" . counsel-minibuffer-history))
+ :custom
+ (counsel-linux-app-format-function
+  #'counsel-linux-app-format-function-name-only)
+ :config (counsel-mode 1))
 #+end_src
 
 *** Ivy Prescient
 
 #+begin_src emacs-lisp
-(use-package ivy-prescient
-  :after counsel
-  :custom
-  (ivy-prescient-enable-filtering nil)
-  :config
-  ;; Uncomment the following line to have sorting remembered across sessions
-  ;(prescient-persist-mode 1)
-  (ivy-prescient-mode 1))
+(use-package
+ ivy-prescient
+ :after counsel
+ :custom (ivy-prescient-enable-filtering nil)
+ :config
+ ;(prescient-persist-mode 1)
+ (ivy-prescient-mode 1))
 #+end_src
 
 *** Search Keybindings
@@ -625,18 +647,19 @@ go install golang.org/x/tools/gopls@latest
 ** Helpful - Better Help Buffers
 
 #+begin_src emacs-lisp
-(use-package helpful
-  :commands (helpful-callable helpful-variable helpful-command helpful-key)
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key)
-  :config
-  (setq helpful-max-buffers 5))
+(use-package
+ helpful
+ :commands
+ (helpful-callable helpful-variable helpful-command helpful-key)
+ :custom
+ (counsel-describe-function-function #'helpful-callable)
+ (counsel-describe-variable-function #'helpful-variable)
+ :bind
+ ([remap describe-function] . counsel-describe-function)
+ ([remap describe-command] . helpful-command)
+ ([remap describe-variable] . counsel-describe-variable)
+ ([remap describe-key] . helpful-key)
+ :config (setq helpful-max-buffers 5))
 #+end_src
 
 * Org Mode Configuration
@@ -651,29 +674,38 @@ go install golang.org/x/tools/gopls@latest
 
 (defun efs/org-font-setup ()
   ;; Check for DM Sans cross-platform
-  (let ((dm-font (car (seq-filter
-                       (lambda (f)
-                         (string-match "DM Sans" f))
-                       (font-family-list)))))
-    
+  (let ((dm-font
+         (car
+          (seq-filter
+           (lambda (f)
+             (string-match "DM Sans" f))
+           (font-family-list)))))
+
     ;; Replace list hyphen with dot
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+    (font-lock-add-keywords
+     'org-mode
+     '(("^ *\\([-]\\) " (0 (prog1
+            ()
+            (compose-region
+             (match-beginning 1) (match-end 1) "•"))))))
 
     ;; Set faces for heading levels
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil
-                          :font dm-font
-                          :weight 'regular
-                          :height (cdr face)))))
+    (dolist
+     (face
+      '((org-level-1 . 1.2)
+        (org-level-2 . 1.1)
+        (org-level-3 . 1.05)
+        (org-level-4 . 1.0)
+        (org-level-5 . 1.1)
+        (org-level-6 . 1.1)
+        (org-level-7 . 1.1)
+        (org-level-8 . 1.1)))
+     (set-face-attribute
+      (car face)
+      nil
+      :font dm-font
+      :weight 'regular
+      :height (cdr face)))))
 
 (defun my/quick-journal-capture ()
   "Quick capture to journal."
@@ -684,217 +716,269 @@ go install golang.org/x/tools/gopls@latest
 ** Org Mode Base Configuration
 
 #+begin_src emacs-lisp
-  (use-package org
-    :demand t
-    :hook (org-mode . efs/org-mode-setup)
-    :bind (("C-c j" . my/quick-journal-capture))
-    :config
-    (with-eval-after-load 'org-src
-      (push '("conf-unix" . conf-unix) org-src-lang-modes))
+(use-package
+ org
+ :demand t
+ :hook (org-mode . efs/org-mode-setup)
+ :bind (("C-c j" . my/quick-journal-capture))
+ :config
+ (with-eval-after-load
+  'org-src (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (python . t)))
+ (org-babel-do-load-languages
+  'org-babel-load-languages '((emacs-lisp . t) (python . t)))
 
-    
-    (setq org-ellipsis " ▾")
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    
-    (setq org-agenda-files
-          '("~/emacs-dotfiles/org/Tasks.org"
-            "~/emacs-dotfiles/org/Birthdays.org"
-            "~/emacs-dotfiles/org/Habits.org"))
 
-    (require 'org-habit)
-    (add-to-list 'org-modules 'org-habit)
-    (setq org-habit-graph-column 60))
+ (setq org-ellipsis " ▾")
+ (setq org-agenda-start-with-log-mode t)
+ (setq org-log-done 'time)
+ (setq org-log-into-drawer t)
+
+ (setq org-agenda-files
+       '("~/emacs-dotfiles/org/Tasks.org"
+         "~/emacs-dotfiles/org/Birthdays.org"
+         "~/emacs-dotfiles/org/Habits.org"))
+
+ (require 'org-habit)
+ (add-to-list 'org-modules 'org-habit)
+ (setq org-habit-graph-column 60))
 #+end_src
 
 ** Org TODO Keywords
 
 #+begin_src emacs-lisp
-  (setq org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
+        (sequence
+         "BACKLOG(b)"
+         "PLAN(p)"
+         "READY(r)"
+         "ACTIVE(a)"
+         "REVIEW(v)"
+         "WAIT(w@/!)"
+         "HOLD(h)"
+         "|"
+         "COMPLETED(c)"
+         "CANC(k@)")))
 #+end_src
 
 ** Org Refile Configuration
 
 #+begin_src emacs-lisp
-  (setq org-refile-targets
-    '(("Archive.org" :maxlevel . 1)
-      ("Tasks.org" :maxlevel . 1)))
+(setq org-refile-targets
+      '(("Archive.org" :maxlevel . 1) ("Tasks.org" :maxlevel . 1)))
 
-  ;; Save Org buffers after refiling!
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+;; Save Org buffers after refiling!
+(advice-add 'org-refile :after 'org-save-all-org-buffers)
 #+end_src
 
 ** Org Tags
 
 #+begin_src emacs-lisp
-  (setq org-tag-alist
-    '((:startgroup)
-       ; Put mutually exclusive tags here
-       (:endgroup)
-       ("@errand" . ?E)
-       ("@home" . ?H)
-       ("@work" . ?W)
-       ("agenda" . ?a)
-       ("planning" . ?p)
-       ("publish" . ?P)
-       ("batch" . ?b)
-       ("note" . ?n)
-       ("idea" . ?i)))
+(setq org-tag-alist
+      '((:startgroup)
+        ; Put mutually exclusive tags here
+        (:endgroup)
+        ("@errand" . ?E)
+        ("@home" . ?H)
+        ("@work" . ?W)
+        ("agenda" . ?a)
+        ("planning" . ?p)
+        ("publish" . ?P)
+        ("batch" . ?b)
+        ("note" . ?n)
+        ("idea" . ?i)))
 #+end_src
 
 ** Org Agenda Custom Commands
 
 #+begin_src emacs-lisp
-  (setq org-agenda-custom-commands
-   '(("d" "Dashboard"
-     ((agenda "" ((org-deadline-warning-days 7)))
-      (todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))
-      (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+(setq org-agenda-custom-commands
+      '(("d" "Dashboard"
+         ((agenda "" ((org-deadline-warning-days 7)))
+          (todo "NEXT" ((org-agenda-overriding-header "Next Tasks")))
+          (tags-todo
+           "agenda/ACTIVE"
+           ((org-agenda-overriding-header "Active Projects")))))
 
-    ("n" "Next Tasks"
-     ((todo "NEXT"
-        ((org-agenda-overriding-header "Next Tasks")))))
+        ("n" "Next Tasks"
+         ((todo
+           "NEXT" ((org-agenda-overriding-header "Next Tasks")))))
 
-    ("W" "Work Tasks" tags-todo "+work-email")
+        ("W" "Work Tasks" tags-todo "+work-email")
 
-    ;; Low-effort next actions
-    ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-     ((org-agenda-overriding-header "Low Effort Tasks")
-      (org-agenda-max-todos 20)
-      (org-agenda-files org-agenda-files)))
+        ;; Low-effort next actions
+        ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+         ((org-agenda-overriding-header "Low Effort Tasks")
+          (org-agenda-max-todos 20)
+          (org-agenda-files org-agenda-files)))
 
-    ("w" "Workflow Status"
-     ((todo "WAIT"
-            ((org-agenda-overriding-header "Waiting on External")
-             (org-agenda-files org-agenda-files)))
-      (todo "REVIEW"
-            ((org-agenda-overriding-header "In Review")
-             (org-agenda-files org-agenda-files)))
-      (todo "PLAN"
-            ((org-agenda-overriding-header "In Planning")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "BACKLOG"
-            ((org-agenda-overriding-header "Project Backlog")
-             (org-agenda-todo-list-sublevels nil)
-             (org-agenda-files org-agenda-files)))
-      (todo "READY"
-            ((org-agenda-overriding-header "Ready for Work")
-             (org-agenda-files org-agenda-files)))
-      (todo "ACTIVE"
-            ((org-agenda-overriding-header "Active Projects")
-             (org-agenda-files org-agenda-files)))
-      (todo "COMPLETED"
-            ((org-agenda-overriding-header "Completed Projects")
-             (org-agenda-files org-agenda-files)))
-      (todo "CANC"
-            ((org-agenda-overriding-header "Cancelled Projects")
-             (org-agenda-files org-agenda-files)))))))
+        ("w" "Workflow Status"
+         ((todo
+           "WAIT"
+           ((org-agenda-overriding-header "Waiting on External")
+            (org-agenda-files org-agenda-files)))
+          (todo
+           "REVIEW"
+           ((org-agenda-overriding-header "In Review")
+            (org-agenda-files org-agenda-files)))
+          (todo
+           "PLAN"
+           ((org-agenda-overriding-header "In Planning")
+            (org-agenda-todo-list-sublevels nil)
+            (org-agenda-files org-agenda-files)))
+          (todo
+           "BACKLOG"
+           ((org-agenda-overriding-header "Project Backlog")
+            (org-agenda-todo-list-sublevels nil)
+            (org-agenda-files org-agenda-files)))
+          (todo
+           "READY"
+           ((org-agenda-overriding-header "Ready for Work")
+            (org-agenda-files org-agenda-files)))
+          (todo
+           "ACTIVE"
+           ((org-agenda-overriding-header "Active Projects")
+            (org-agenda-files org-agenda-files)))
+          (todo
+           "COMPLETED"
+           ((org-agenda-overriding-header "Completed Projects")
+            (org-agenda-files org-agenda-files)))
+          (todo
+           "CANC"
+           ((org-agenda-overriding-header "Cancelled Projects")
+            (org-agenda-files org-agenda-files)))))))
 #+end_src
 
 ** Org Capture Templates
 
 #+begin_src emacs-lisp
-  (setq org-capture-templates
-    `(("t" "Tasks / Projects")
-      ("tt" "Task" entry (file+olp "~/emacs-dotfiles/org/Tasks.org" "Inbox")
-           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+(setq org-capture-templates
+      `(("t" "Tasks / Projects")
+        ("tt"
+         "Task"
+         entry
+         (file+olp "~/emacs-dotfiles/org/Tasks.org" "Inbox")
+         "* TODO %?\n  %U\n  %a\n  %i"
+         :empty-lines 1)
 
-      ("j" "Journal Entries")
-      ("jj" "Journal" entry
-           (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
-           "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
-      ("jm" "Meeting" entry
-           (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
-           "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-           :clock-in :clock-resume
-           :empty-lines 1)
+        ("j" "Journal Entries")
+        ("jj"
+         "Journal"
+         entry
+         (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+         "\n* %<%I:%M %p> - Journal :journal:\n\n%?\n\n"
+         :clock-in
+         :clock-resume
+         :empty-lines 1)
+        ("jm"
+         "Meeting"
+         entry
+         (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+         "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+         :clock-in
+         :clock-resume
+         :empty-lines 1)
 
-      ("w" "Workflows")
-      ("we" "Checking Email" entry (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
-           "* Checking Email :email:\n\n%?" :clock-in :clock-resume :empty-lines 1)
+        ("w" "Workflows")
+        ("we"
+         "Checking Email"
+         entry
+         (file+olp+datetree "~/emacs-dotfiles/org/Journal.org")
+         "* Checking Email :email:\n\n%?"
+         :clock-in
+         :clock-resume
+         :empty-lines 1)
 
-      ("m" "Metrics Capture")
-      ("mw" "Weight" table-line (file+headline "~/emacs-dotfiles/org/Metrics.org" "Weight")
-       "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+        ("m" "Metrics Capture")
+        ("mw"
+         "Weight"
+         table-line
+         (file+headline "~/emacs-dotfiles/org/Metrics.org" "Weight")
+         "| %U | %^{Weight} | %^{Notes} |"
+         :kill-buffer t)))
 #+end_src
 
 ** Org Font Configuration
 
 #+begin_src emacs-lisp
-(with-eval-after-load 'org
-  (efs/org-font-setup)
-
-  ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  (set-face-attribute 'org-block nil :foreground 'unspecified :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil
-                      :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil
-                      :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+(with-eval-after-load
+ 'org
+ (efs/org-font-setup)
+ ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+ (set-face-attribute
+  'org-block
+  nil
+  :foreground 'unspecified
+  :inherit 'fixed-pitch)
+ (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
+ (set-face-attribute 'org-table nil :inherit '(shadow fixed-pitch))
+ (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+ (set-face-attribute
+  'org-special-keyword
+  nil
+  :inherit '(font-lock-comment-face fixed-pitch))
+ (set-face-attribute
+  'org-meta-line
+  nil
+  :inherit '(font-lock-comment-face fixed-pitch))
+ (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
 #+end_src
 
 ** Org Bullets
 
 #+begin_src emacs-lisp
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+(use-package
+ org-bullets
+ :after org
+ :hook (org-mode . org-bullets-mode)
+ :custom
+ (org-bullets-bullet-list
+  '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
 ** Visual Fill Column
 
 #+begin_src emacs-lisp
 (defun efs/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
+  (setq
+   visual-fill-column-width 100
+   visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 
-(use-package visual-fill-column
-  :hook (org-mode . efs/org-mode-visual-fill))
+(use-package
+ visual-fill-column
+ :hook (org-mode . efs/org-mode-visual-fill))
 #+end_src
 
 ** Org-roam
 
 #+begin_src emacs-lisp
-  (use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-directory (file-truename "~/emacs-dotfiles/org/"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode)
-  (require 'org-roam-protocol))
+(use-package
+ org-roam
+ :ensure t
+ :custom (org-roam-directory (file-truename "~/emacs-dotfiles/org/"))
+ :bind
+ (("C-c n l" . org-roam-buffer-toggle)
+  ("C-c n f" . org-roam-node-find)
+  ("C-c n g" . org-roam-graph)
+  ("C-c n i" . org-roam-node-insert)
+  ("C-c n c" . org-roam-capture)
+  ("C-c n j" . org-roam-dailies-capture-today))
+ :config
+ (setq org-roam-node-display-template
+       (concat
+        "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+ (org-roam-db-autosync-mode) (require 'org-roam-protocol))
 #+end_src
 
 ** Org Clock Sound
 
 #+begin_src emacs-lisp
-(setq org-clock-sound 
-      (expand-file-name "sounds/cheer.wav" 
-                        (file-name-directory (or load-file-name buffer-file-name))))
+(setq org-clock-sound
+      (expand-file-name
+       "sounds/cheer.wav"
+       (file-name-directory (or load-file-name buffer-file-name))))
 #+end_src
 
 * Forge - Personal Workflow
@@ -920,8 +1004,10 @@ Custom workflow system for task and journal management.
   (interactive)
   (find-file forge-journal-file)
   (goto-char (point-max))
-  (insert (format "\n* Caveman Q (%s)\n- What am I stuck on?\n- What do I know?\n- What's one small action I can take?\n"
-                  (format-time-string "%H:%M")))
+  (insert
+   (format
+    "\n* Caveman Q (%s)\n- What am I stuck on?\n- What do I know?\n- What's one small action I can take?\n"
+    (format-time-string "%H:%M")))
   (recenter))
 
 ;; Forge keybindings
@@ -937,49 +1023,76 @@ Personal reference for concepts learned while building projects.
 ** Wiki Configuration
 
 #+begin_src emacs-lisp
-        (defvar my/wikis
-          '((javascript :dir "wiki/javascript" :tag "javascript" :lang "javascript" :key "j")
-            (svelte     :dir "wiki/svelte"     :tag "svelte"     :lang "svelte"     :key "s")
-  (webapis     :dir "wiki/webapis"    :tag "webapis"    :lang "javascript" :key "w")))
+(defvar my/wikis
+  '((javascript
+     :dir "wiki/javascript"
+     :tag "javascript"
+     :lang "javascript"
+     :key "j")
+    (svelte :dir "wiki/svelte" :tag "svelte" :lang "svelte" :key "s")
+    (webapis
+     :dir "wiki/webapis"
+     :tag "webapis"
+     :lang "javascript"
+     :key "w")))
 
-        (defun my/wiki--config (name)
-          (cdr (assoc name my/wikis)))
+(defun my/wiki--config (name)
+  (cdr (assoc name my/wikis)))
 
-        (defun my/wiki--dir (name)
-          (expand-file-name (plist-get (my/wiki--config name) :dir)
-                            user-emacs-directory))
+(defun my/wiki--dir (name)
+  (expand-file-name
+   (plist-get (my/wiki--config name) :dir) user-emacs-directory))
 
-          (defun my/wiki-select ()
+(defun my/wiki-select ()
   (intern (completing-read "Wiki: " (mapcar #'car my/wikis) nil t)))
 
-  (defun my/wiki-open (name)
-    (interactive (list (my/wiki-select)))
-    (let ((dir (my/wiki--dir name)))
-      (unless (file-directory-p dir) (make-directory dir t))
-      (find-file (expand-file-name "index.org" dir))))
+(defun my/wiki-open (name)
+  (interactive (list (my/wiki-select)))
+  (let ((dir (my/wiki--dir name)))
+    (unless (file-directory-p dir) (make-directory dir t))
+    (find-file (expand-file-name "index.org" dir))))
 
-        (defun my/wiki-new-entry (name)
-          (interactive (list (my/wiki-select)))
-          (let* ((config (my/wiki--config name))
-        	 (dir (my/wiki--dir name))
-        	 (tag (plist-get config :tag))
-        	 (lang (plist-get config :lang))
-        	 (title (read-string "Entry title: "))
-        	 (slug (downcase (replace-regexp-in-string "[^a-z0-9]+" "-" title)))
-        	 (filepath (expand-file-name (concat slug ".org") dir)))
-            (unless (file-directory-p dir) (make-directory dir t))
-            (find-file filepath)
-            (insert (format "#+TITLE: %s\n#+FILETAGS: :%s:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src %s\n\n#+end_src\n" title tag lang))
-            (goto-char (point-min))
-            (forward-line 4)))
-      
-      ;; Keybindings
-      (global-set-key (kbd "C-c w o") #'my/wiki-open)
-      (global-set-key (kbd "C-c w n") #'my/wiki-new-entry)
+(defun my/wiki-new-entry (name)
+  (interactive (list (my/wiki-select)))
+  (let* ((config (my/wiki--config name))
+         (dir (my/wiki--dir name))
+         (tag (plist-get config :tag))
+         (lang (plist-get config :lang))
+         (title (read-string "Entry title: "))
+         (slug
+          (downcase
+           (replace-regexp-in-string "[^a-z0-9]+" "-" title)))
+         (filepath (expand-file-name (concat slug ".org") dir)))
+    (unless (file-directory-p dir) (make-directory dir t))
+    (find-file filepath)
+    (insert
+     (format
+      "#+TITLE: %s\n#+FILETAGS: :%s:\n\n* Big Questions\n\n** What is this?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src %s\n\n#+end_src\n"
+      title
+      tag
+      lang))
+    (goto-char (point-min))
+    (forward-line 4)))
 
-      (global-set-key (kbd "C-c w j") (lambda () (interactive) (my/wiki-open 'javascript)))
-      (global-set-key (kbd "C-c w s") (lambda () (interactive) (my/wiki-open 'svelte)))
-  (global-set-key (kbd "C-c w w") (lambda () (interactive) (my/wiki-open 'webapis)))
+;; Keybindings
+(global-set-key (kbd "C-c w o") #'my/wiki-open)
+(global-set-key (kbd "C-c w n") #'my/wiki-new-entry)
+
+(global-set-key
+ (kbd "C-c w j")
+ (lambda ()
+   (interactive)
+   (my/wiki-open 'javascript)))
+(global-set-key
+ (kbd "C-c w s")
+ (lambda ()
+   (interactive)
+   (my/wiki-open 'svelte)))
+(global-set-key
+ (kbd "C-c w w")
+ (lambda ()
+   (interactive)
+   (my/wiki-open 'webapis)))
 #+end_src
 
 ** Wiki Keybindings
@@ -1014,13 +1127,17 @@ Personal reference for concepts learned while building projects.
 Prevents window resize crashes by delaying font setting.
 
 #+begin_src emacs-lisp
-(add-hook 'after-init-hook
-          (lambda ()
-            (run-with-timer 0.5 nil 
-                            (lambda ()
-                              (set-face-attribute 'default nil 
-                                                  :font "JetBrains Mono" 
-                                                  :height efs/default-font-size)))))
+(add-hook
+ 'after-init-hook
+ (lambda ()
+   (run-with-timer
+    0.5 nil
+    (lambda ()
+      (set-face-attribute
+       'default
+       nil
+       :font "JetBrains Mono"
+       :height efs/default-font-size)))))
 #+end_src
 
 * Email - Gnus
@@ -1034,16 +1151,18 @@ Prevents window resize crashes by delaying font setting.
 (setq mm-decrypt-option 'never)
 
 (setq gnus-select-method
-      '(nnimap "protonmail"
-               (nnimap-address "127.0.0.1")
-               (nnimap-server-port 1143)
-               (nnimap-stream network)))
+      '(nnimap
+        "protonmail"
+        (nnimap-address "127.0.0.1")
+        (nnimap-server-port 1143)
+        (nnimap-stream network)))
 
-(setq smtpmail-smtp-server "127.0.0.1"
-      smtpmail-smtp-service 1025
-      smtpmail-stream-type 'plain
-      send-mail-function 'smtpmail-send-it
-      message-send-mail-function 'smtpmail-send-it)
+(setq
+ smtpmail-smtp-server "127.0.0.1"
+ smtpmail-smtp-service 1025
+ smtpmail-stream-type 'plain
+ send-mail-function 'smtpmail-send-it
+ message-send-mail-function 'smtpmail-send-it)
 
 (setq gnus-message-replysign nil)
 (setq gnus-message-replyencrypt nil)
