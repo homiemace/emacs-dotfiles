@@ -19,6 +19,7 @@ url/cache/
 url/cookies
 eshell/history
 eshell/lastdir
+**/newsrc.eld
 recentf
 places
 bookmarks
