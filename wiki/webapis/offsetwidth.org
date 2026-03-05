@@ -1,0 +1,30 @@
+#+TITLE: offsetWidth
+#+FILETAGS: :webapis:
+
+* Big Questions
+
+** What is this?
+
+The visible width of an element: content, border, scrollbar, and padding.
+
+** Why is this important?
+
+Gives the full space an element occupies in the layout.
+
+** When will I need this?
+
+Responsive layouts, positioning calculations, or when the entire size matters.
+
+** How does it work?
+
+Returns an integer pixel value. Includes scrollbar if rendered. Triggers recalculation (reflow) when read.
+
+* Code Examples
+
+#+begin_src typescript
+let carousel: HTMLDivElement;
+
+function getSlideWidth() {
+	return carousel ? carousel.offsetWidth / totalSlides : 0;
+}
+#+end_src
