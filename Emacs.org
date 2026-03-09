@@ -988,14 +988,15 @@ Custom workflow system for task management.
     (format-time-string "%H:%M")))
   (recenter))
 
-(defun forge/dwarf-map ()
+(defun forge/underhood-map ()
   (interactive)
   (insert
    (format
-    "\n* Dwarf Map (%s)\n- What are the main parts?\n- What is state?\n- What is derived/calculated?\n- What talks to the outside world?\n- How do the parts connect?\n"
+    "\n* Underhood Map (%s)\n- What are the main parts?\n- What is state?\n- What is derived/calculated?\n- What talks to the outside world?\n- How do the parts connect?\n"
     (format-time-string "%H:%M")))
   (recenter))
 
+(global-set-key (kbd "C-c f u") 'forge/underhood-map)
 (global-set-key (kbd "C-c f c") 'forge/caveman-q)
 #+end_src
 
