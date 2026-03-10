@@ -996,6 +996,15 @@ Custom workflow system for task management.
     (format-time-string "%H:%M")))
   (recenter))
 
+(defun forge/breadcrumb-step ()
+  (interactive)
+  (insert
+   (format
+    "\n* Breadcrumb Step (%s)\n- What is the big goal?\n- What is the next visible sub-problem?\n- What is the tiniest action I can take?\n- How will I know it worked?\n"
+    (format-time-string "%H:%M")))
+  (recenter))
+
+(global-set-key (kbd "C-c f b") 'forge/breadcrumb-step)
 (global-set-key (kbd "C-c f u") 'forge/underhood-map)
 (global-set-key (kbd "C-c f c") 'forge/caveman-q)
 #+end_src
