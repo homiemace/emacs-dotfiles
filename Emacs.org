@@ -1004,6 +1004,14 @@ Custom workflow system for task management.
     (format-time-string "%H:%M")))
   (recenter))
 
+(defun forge/loose-wire ()
+  (interactive)
+  (insert
+   (format
+    "\n* Loose Wire (%s)\n- What was broken?\n- What did I assume?\n- What was actually true?\n- What fixed it?\n- What clue should I notice sooner next time?\n"
+    (format-time-string "%H:%M"))))
+
+(global-set-key (kbd "C-c f l") 'forge/loose-wire)
 (global-set-key (kbd "C-c f b") 'forge/breadcrumb-step)
 (global-set-key (kbd "C-c f u") 'forge/underhood-map)
 (global-set-key (kbd "C-c f c") 'forge/caveman-q)
