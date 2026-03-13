@@ -1019,6 +1019,14 @@ Custom workflow system for task management.
     (format-time-string "%H:%M")))
   (recenter))
 
+(defun my/word-hunt ()
+  (interactive)
+  (insert
+   (format
+    "\n* Word Hunt (%s)\n- Pattern I'm practicing:\n- Can I write a tiny version from memory?\n- What did I forget?\n- What rule will I keep?\n"
+    (format-time-string "%H:%M"))))
+
+(global-set-key (kbd "C-c f w") 'forge/word-hunt)
 (global-set-key (kbd "C-c f s") 'forge/sandbox-build)
 (global-set-key (kbd "C-c f l") 'forge/loose-wire)
 (global-set-key (kbd "C-c f b") 'forge/breadcrumb-step)
