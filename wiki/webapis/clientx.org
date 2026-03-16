@@ -1,0 +1,36 @@
+#+TITLE: clientX
+#+FILETAGS: :webapis:
+
+* Big Questions
+
+** What is this?
+
+Horizontal coordinates relative to the viewport (not page).
+
+** Why is this important?
+
+Useful dragging/swiping math. Anything where you need viewport coordinates in an event.
+
+** When will I need this?
+
+Needed when tracking movement.
+
+** How does it work?
+
+Save starting x, read current x, subtract to get movement.
+
+* Code Examples
+
+#+begin_src typescript
+  let dragStartX = 0;
+  let dragPx = 0;
+
+  function handlePointerDown(event: PointerEvent) {
+    dragStartX = event.clientX;
+  }
+
+  function handlePointerMove(event: PointerEvent) {
+    // current horizontal - starting horizontal
+    dragPx = event.clientX - dragStartX;
+  }
+#+end_src
