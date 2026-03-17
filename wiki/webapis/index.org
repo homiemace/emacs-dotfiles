@@ -7,6 +7,7 @@ My personal reference for Web API concepts learned while building projects.
 
 ** DOM
 ** Pointer Events
+*** [[file:clientX.org][clientX]] - Horizontal coordinate within viewport
 ** Patterns
 
 * Quick Reference
