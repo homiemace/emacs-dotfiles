@@ -22,6 +22,7 @@ My personal reference for JavaScript concepts learned while building projects.
 - [[file:event-propagation.org][Event Propagation]] - How clicks bubble up the DOM tree
 - [[file:click-outside.org][Click Outside Detection]] - Close dropdowns when clicking elsewhere
 - [[file:boolean-vs-index.org][Boolean vs Index State]] - Choosing right state type for multiple items
+- [[file:finite-state-machine.org][Finite State Machines]] - Modeling UI behavior with explicit states and transitions
   
 ** Syntax
 - [[file:arrow-functions.org][Arrow Functions =>]] - Modern function shorthand
