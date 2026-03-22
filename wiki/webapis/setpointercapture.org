@@ -5,14 +5,26 @@
 
 ** What is this?
 
+Specified element assigned as the /capture target/ of pointer events.
+
 ** Why is this important?
+
+It is needed to connect the pointerId to a div element and add interaction.
 
 ** When will I need this?
 
+To connect pointer events to a designated element.
+
 ** How does it work?
+
+Designates a specific element to receive all future pointer events for a given pointer, even when you move pointer outside of its boundaries until capture is released.
 
 * Code Examples
 
-#+begin_src javascript
+#+begin_src typescript
+  let Carousel: HTMLDivElement;
 
+  function handlePointerDown(event: PointerEvent) {
+      Carousel.setPointerCapture(event.pointerId);
+  }
 #+end_src
