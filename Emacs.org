@@ -1,5 +1,5 @@
 #+TITLE: Homie's  Emacs Configuration
-#+PROPERTY: header-args:emacs-lisp :tangle ./Emacs.el :mkdirp yes
+#+PROPERTY: header-args:emacs-lisp :tangle Emacs.el :mkdirp yes
 
 * Table of Contents :TOC:
 :PROPERTIES:
