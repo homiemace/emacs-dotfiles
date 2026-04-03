@@ -16,3 +16,21 @@
 #+begin_src svelte
 
 #+end_src
+#+TITLE: $bindable
+#+FILETAGS: :svelte:
+
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
+
+* Code Examples
+
+#+begin_src svelte
+
+#+end_src
