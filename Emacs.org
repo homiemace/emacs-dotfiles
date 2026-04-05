@@ -1019,7 +1019,7 @@ Custom workflow system for task management.
     (format-time-string "%H:%M")))
   (recenter))
 
-(defun my/word-hunt ()
+(defun forge/word-hunt ()
   (interactive)
   (insert
    (format
