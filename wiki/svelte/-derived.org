@@ -5,14 +5,27 @@
 
 ** What is this?
 
+A reactive computed variable made from $state or other reactive variables.
+
 ** Why is this important?
+
+It keeps calculated automatically in sync with reactive state, without needing to update manually.
 
 ** When will I need this?
 
+When you want a value to be calculated from other reactive values and update automatically.
+
 ** How does it work?
+
+You wrap a calculation with $derived(...) to make it a reactive computed value. When the reactive values it depends on change, Svelte recalculates it and updates anything using it.
 
 * Code Examples
 
 #+begin_src svelte
+  <script>
+    let name = $state("Homie");
+    let sentence = $derived("Name: " + name);
 
+    name = "Legend";
+  </script>
 #+end_src
