@@ -24,9 +24,10 @@ Svelte tracks reactive state -> updates anything using it
 #+begin_src svelte
   <script>
     let name = $state("Homie");
+    let sentence $derived("Name: " + name);
   </script>
 
-  <p>{name}</p>
+  <p>{sentence}</p>
 
   <button onclick={() => (name = "Legend")}>Change name</button>
 #+end_src
