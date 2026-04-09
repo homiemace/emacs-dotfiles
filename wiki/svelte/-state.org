@@ -5,14 +5,26 @@
 
 ** What is this?
 
+A way to make a variable reactive.
+
 ** Why is this important?
+
+So Svelte can track a variable and update anything that depends on it.
 
 ** When will I need this?
 
+When you want a value to change and have the UI or other reactive values update automatically.
+
 ** How does it work?
+
+You wrap a value with $state(...) to mark it as reactive state. When that value changes, Svelte updates anything using it.
 
 * Code Examples
 
 #+begin_src svelte
+  <script>
+    let name = $state("Homie");
 
+    name = "Legend";
+  </script>
 #+end_src
