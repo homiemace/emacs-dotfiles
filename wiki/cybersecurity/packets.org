@@ -1,0 +1,18 @@
+#+TITLE: packets
+#+FILETAGS: :cybersecurity:
+
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
+
+* Code Examples
+
+#+begin_src text
+
+#+end_src
