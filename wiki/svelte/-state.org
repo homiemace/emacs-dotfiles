@@ -5,7 +5,7 @@
 
 ** What is this?
 
-A way to make a variable reactive.
+A way to make a variable [[file:reactivity.org][reactive]].
 
 ** Why is this important?
 

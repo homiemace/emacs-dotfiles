@@ -5,7 +5,7 @@
 
 ** What is this?
 
-A reactive computed variable made from $state or other reactive variables.
+A reactive computed variable made from $state or other [[file:reactivity.org][reactive]] variables.
 
 ** Why is this important?
 
