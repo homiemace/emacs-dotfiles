@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       d6de927c-8e69-430b-af74-a5c52326eea1
+:END:
+#+title: Packets
+#+filetags: :cybersecurity:
+* Big Questions
+
+** What is this?
+
+
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
+
+* Code Examples
+
+#+begin_src text
+
+#+end_src
