@@ -7,16 +7,19 @@
 
 ** What is this?
 
-
+Packets are small chunks of data sent over a network.
 
 ** Why is this important?
 
+Because most network communication happens by breaking data into packets.
+
 ** When will I need this?
+
+When I want to understand how devices communicate over a network.
 
 ** How does it work?
 
-* Code Examples
+A message is broken up into small chunks called packets. Each packet contains:
 
-#+begin_src text
-
-#+end_src
+- Header: Metadata like where it came from, where it is going, and how it should be handled.
+- Payload: The actual data.
