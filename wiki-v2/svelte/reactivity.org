@@ -7,16 +7,29 @@
 
 ** What is this?
 
-
+A way to keep things in sync automatically when data changes.
 
 ** Why is this important?
 
+To automatically update values that depend on other data, no need to manually keep everything synced.
+
 ** When will I need this?
 
+Building interactive apps, using data that can change, and when the screen, calculations, or other values update after a change.
+
 ** How does it work?
+
+Svelte tracks reactive state -> updates anything using it.
 
 * Code Examples
 
 #+begin_src svelte
+  <script>
+    let name = $state("Homie");
+    let sentence $derived("Name: " + name);
+  </script>
 
+  <p>{sentence}</p>
+
+  <button onclick={() => (name = "Legend")}>Change name</button>
 #+end_src
