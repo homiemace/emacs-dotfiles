@@ -1,11 +1,14 @@
-#+TITLE: $state
-#+FILETAGS: :svelte:
+:PROPERTIES:
+:ID:       3c82a3a1-3144-49ed-a9d0-c4d95c513663
+:END:
+#+title: $state
+#+filetags: :svelte:
 
 * Big Questions
 
 ** What is this?
 
-A way to make a variable [[file:reactivity.org][reactive]].
+A way to make a variable [[id:4dfed1f5-3d06-4189-abcc-5a66deed5cfb][reactive]].
 
 ** Why is this important?
 
