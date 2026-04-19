@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       ac3a18c5-afba-4aec-a28c-6fe74496ebfb
+:END:
+#+title: $effect
+#+filetags: :svelte:
+
+* Big Questions
+
+** What is this?
+
+
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
+
+* Code Examples
+
+#+begin_src svelte
+
+#+end_src

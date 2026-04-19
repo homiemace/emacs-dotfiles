@@ -1,0 +1,23 @@
+:PROPERTIES:
+:ID:       53f66e61-b9c5-495a-a251-23f11b03738f
+:END:
+#+title: $props
+#+filetags: :svelte:
+
+* Big Questions
+
+** What is this?
+
+
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
+
+* Code Examples
+
+#+begin_src svelte
+
+#+end_src

@@ -967,11 +967,11 @@ go install golang.org/x/tools/gopls@latest
     ("s"
      "svelte"
      plain
-     "* Big Questions\n\n** What is this?\n\n%?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src svelte\n\n#+end_src\n"
+     (file "~/emacs-dotfiles/templates/svelte-template.org")
      :if-new
      (file+head
       "svelte/${slug}.org"
-      "#+title: ${title}\n#+filetags: :svelte:\n\n")
+      "#+title: ${title}\n#+filetags: :svelte:\n")
      :unnarrowed t)
     ("c"
      "css"
