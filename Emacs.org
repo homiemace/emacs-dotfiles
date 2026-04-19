@@ -967,7 +967,7 @@ go install golang.org/x/tools/gopls@latest
     ("s"
      "svelte"
      plain
-     (file "~/emacs-dotfiles/templates/svelte-template.org")
+     (file "~/emacs-dotfiles/wiki-v2/templates/svelte-template.org")
      :if-new
      (file+head
       "svelte/${slug}.org"
@@ -993,11 +993,11 @@ go install golang.org/x/tools/gopls@latest
     ("y"
      "cybersecurity"
      plain
-     "* Big Questions\n\n** What is this?\n\n%?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src text\n\n#+end_src\n"
+     (file "~/emacs-dotfiles/wiki-v2/templates/cybersec-template.org")
      :if-new
      (file+head
       "cybersecurity/${slug}.org"
-      "#+title: ${title}\n#+filetags: :cybersecurity:\n\n")
+      "#+title: ${title}\n#+filetags: :cybersecurity:\n")
      :unnarrowed t)))
  :bind
  (("C-c n l" . org-roam-buffer-toggle)
