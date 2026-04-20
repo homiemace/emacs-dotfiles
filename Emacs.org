@@ -976,7 +976,7 @@ go install golang.org/x/tools/gopls@latest
     ("c"
      "css"
      plain
-     "* Big Questions\n\n** What is this?\n\n%?\n\n** Why is this important?\n\n** When will I need this?\n\n** How does it work?\n\n* Code Examples\n\n#+begin_src javascript\n\n#+end_src\n"
+     (file "~/emacs-dotfiles/wiki-v2/templates/css-template.org")
      :if-new
      (file+head
       "css/${slug}.org" "#+title: ${title}\n#+filetags: :css:\n\n")
