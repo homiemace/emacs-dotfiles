@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       D7115090-EA61-458D-B5B5-B457C6FD8B0E
+:END:
+#+title: Finite-state machine
+#+filetags: :javascript:
+* Big Questions
+
+** What is this?
+
+Loop that follows rules based on a limited number of states which are based on inputs or events.
+
+** Why is this important?
+
+It provides a simplified way to model systems that change based on inputs.
+
+** When will I need this?
+
+- When making forms that depend on previous inputs
+- Onboarding, with steps based on user actions
+- UI that changes based on user input
+
+** How does it work?
+
+It checks current state and input received, then follows rules to move to next state, this repeats often in a loop.
+
+* ELI5 Definition
+
+Imagine you are a traffic light, a ~fsm~ is the different mood you have: green, red, and yellow. You change based on a combination of timers and sensors, which is the user input telling you to change.
+
+* Code Examples
+
+#+begin_src javascript
+let state = $state("idle");
+
+function send(event) {
+  if (state === "idle" && event === "start") state = "running";
+  else if (state === "running" && event === "stop") state = "idle";
+}
+#+end_src
