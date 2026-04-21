@@ -952,7 +952,7 @@ go install golang.org/x/tools/gopls@latest
  org-roam
  :ensure t
  :custom
- (org-roam-directory (file-truename "~/emacs-dotfiles/wiki-v2"))
+ (org-roam-directory (expand-file-name "~/emacs-dotfiles/wiki-v2"))
  (org-roam-completion-everywhere t)
  (org-roam-capture-templates
   '(("j"
