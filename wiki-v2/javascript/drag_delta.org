@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       370e07fb-b811-44ed-bb36-5a58d4c8bf1a
+:END:
+#+title: Drag delta
+#+filetags: :javascript:
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
+
+* Code Examples
+
+#+begin_src javascript
+  
+#+end_src
