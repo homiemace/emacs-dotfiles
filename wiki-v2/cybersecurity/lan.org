@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       033e85ba-78b1-450d-8eaa-62658fda889e
+:END:
+#+title: LAN
+#+filetags: :cybersecurity:
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
