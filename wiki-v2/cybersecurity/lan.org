@@ -7,8 +7,24 @@
 
 ** What is this?
 
+A LAN (Local Area Network) connects devices in a small private area, like a home, office, or school. It is smaller and more localized than a WAN, which spans larger geographic areas.
+
 ** Why is this important?
+
+LANs let nearby devices communicate, share resources, and access services like printers, file shares, and local servers, and is the most basic. In cybersecurity, they matter because local access is convenient but can also *increase* attack surface.
 
 ** When will I need this?
 
+When connecting to printers, sharing files, accessing local servers or other computers, troubleshooting local connectivity, or deciding whether to allow LAN access in a firewall or VPN.
+
 ** How does it work?
+
+Devices on the same local network communicate through switches, routers, or wireless access points using IP addresses and protocols like Ethernet or Wi-Fi. Access to the LAN can also be restricted by firewalls or VPN settings to reduce exposure to local threats.
+
+** How secure is it?
+
+A LAN is generally more secure than a WAN because it is private, smaller, and easier to control. However, it is *not secure by default*. Its safety depends on proper configuration, access control, encryption, and network segmentation.
+
+** Why do VPNs or firewalls mention LAN access?
+
+This controls whether your device can talk to other devices on the same local network (printers, file shares, or other computers). Disabling LAN access can /isolate your device/ from local threats, which is useful on untrusted networks.
