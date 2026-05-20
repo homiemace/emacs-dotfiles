@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       8222cf72-7c4d-4d32-9f9c-24e20b076f07
+:END:
+#+title: WAN
+#+filetags: :cybersecurity:
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
