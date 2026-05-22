@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       0445445b-91b9-4643-bace-9836fcac3a36
+:END:
+#+title: DNS
+#+filetags: :cybersecurity:
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
