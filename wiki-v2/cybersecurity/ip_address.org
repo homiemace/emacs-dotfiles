@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       338e9dc4-f1b2-44da-8b3b-0532589ff466
+:END:
+#+title: IP address
+#+filetags: :cybersecurity:
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
