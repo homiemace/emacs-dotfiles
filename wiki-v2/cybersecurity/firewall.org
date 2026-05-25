@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       146d2db1-b85e-479f-8d5d-707e20e08457
+:END:
+#+title: Firewall
+#+filetags: :cybersecurity:
+* Big Questions
+
+** What is this?
+
+** Why is this important?
+
+** When will I need this?
+
+** How does it work?
