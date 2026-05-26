@@ -7,7 +7,7 @@
 
 ** What is this?
 
-A LAN (Local Area Network) connects devices in a small private area, like a home, office, or school. It is smaller and more localized than a WAN, which spans larger geographic areas.
+A LAN (Local Area Network) connects devices in a small private area, like a home, office, or school. It is smaller and more localized than a [[id:8222cf72-7c4d-4d32-9f9c-24e20b076f07][WAN]], which spans larger geographic areas.
 
 ** Why is this important?
 
