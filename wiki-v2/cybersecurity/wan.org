@@ -7,8 +7,16 @@
 
 ** What is this?
 
+A WAN (Wide Area Network) connects devices or smaller networks across large geographic areas. It often links multiple [[id:033e85ba-78b1-450d-8eaa-62658fda889e][LANs]] together. The internet being the most common example.
+
 ** Why is this important?
+
+WANs allow communication between distant locations and connect local networks to outside networks. In cybersecurity, they matter because they *increase* external exposure and often require stronger security controls.
 
 ** When will I need this?
 
+When learning how the internet works, connecting multiple locations, using VPNs, studying network security, or comparing local vs external network risks.
+
 ** How does it work?
+
+A WAN links networks over long distances using infrastructure from internet service providers, carriers, or private connections. It often connects multiple LANs through routers and other networking equipment.
