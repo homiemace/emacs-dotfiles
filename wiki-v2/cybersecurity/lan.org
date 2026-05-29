@@ -19,7 +19,7 @@ When connecting to printers, sharing files, accessing local servers or other com
 
 ** How does it work?
 
-Devices on the same local network communicate through switches, routers, or wireless access points using IP addresses and protocols like Ethernet or Wi-Fi. Access to the LAN can also be restricted by firewalls or VPN settings to reduce exposure to local threats.
+Devices on the same local network communicate through switches, routers, or wireless access points using IP addresses and protocols like Ethernet or Wi-Fi. A LAN can also connect outward to a *WAN*, such as the internet. Access to the LAN can also be restricted by firewalls or VPN settings to reduce exposure to local threats.
 
 ** How secure is it?
 

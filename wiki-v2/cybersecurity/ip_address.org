@@ -7,8 +7,24 @@
 
 ** What is this?
 
+An IP address is a numerical network address used to identify where a device is on a network so data can be sent to it.
+
+*Two common types:*
+
+*** Local/private IP:
+**** Used inside a local network, home Wi-Fi
+
+*** Public IP:
+**** Used on the internet to identify your network to outside systems
+
 ** Why is this important?
+
+It allows devices to communicate across networks and helps routers know where to send packets. It is also important in cybersecurity for logging, filtering, and traffic analysis.
 
 ** When will I need this?
 
+When working with networking, cybersecurity, troubleshooting, firewalls, web servers, VPNs, and traffic analysis.
+
 ** How does it work?
+
+Devices send data in packets that contain source and destination IP addresses. Routers use the destination IP to forward packets to the correct network location.
