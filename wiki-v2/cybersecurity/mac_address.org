@@ -7,8 +7,34 @@
 
 ** What is this?
 
+*** A MAC address is a hardware-related identifier used by a network interface on a local network.
+
+*** It is used on the local network to help deliver data to the correct device.
+
+*** MAC addresses work at Layer 2 of networking, unlike IP addresses, which work at Layer 3.
+
 ** Why is this important?
+
+*** MAC addresses are necessary for communication on a local network.
+
+*** Devices use them to send data to the correct network interface nearby.
+
+*** They are important in networking and cybersecurity because they appear in things like ARP, switch forwarding, MAC spoofing, and device identification.
 
 ** When will I need this?
 
+*** When learning how devices communicate on a [[id:033e85ba-78b1-450d-8eaa-62658fda889e][LAN]]
+
+*** When troubleshooting local network issues
+
+*** When studying ARP, switches, and packet/frame delivery
+
+*** When learning about MAC spoofing, ARP poisoning, or network monitoring in cybersecurity
+
 ** How does it work?
+
+*** A device sends data on the local network using a MAC address.
+
+*** If it knows the other device’s IP address but not its MAC, it uses ARP to find it.
+
+*** If the data is going somewhere outside the network, it sends it to the router’s MAC address first.
