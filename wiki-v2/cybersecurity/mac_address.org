@@ -38,3 +38,9 @@
 *** If it knows the other device’s IP address but not its MAC, it uses ARP to find it.
 
 *** If the data is going somewhere outside the network, it sends it to the router’s MAC address first.
+
+** Quick clarification
+*** Local network = same network
+*** Across networks = different networks
+*** MAC = local delivery
+*** IP = across-network delivery
